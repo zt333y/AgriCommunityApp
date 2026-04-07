@@ -3,94 +3,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#2196F3"
-    android:fitsSystemWindows="true">
+    android:background="#F5F5F5">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="我 的 订 单"
-        android:textSize="20sp"
-        android:gravity="center"
+        android:background="#2196F3"
+        android:text="我的订单"
         android:textColor="#FFFFFF"
-        android:textStyle="bold"/>
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="center"/>
 
     <LinearLayout
+        android:id="@+id/layout_empty_order"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="#FFFFFF"
-        android:elevation="4dp"
-        android:paddingTop="10dp"> <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:visibility="gone">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="全部"
-            android:textColor="#2196F3"
-            android:textSize="15sp"
-            android:textStyle="bold"/>
-        <View
-            android:layout_width="25dp"
-            android:layout_height="3dp"
-            android:background="#2196F3"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="2dp"/>
-    </LinearLayout>
+            android:text="📋"
+            android:textSize="80sp"/>
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="待付款"
-                android:textColor="#666666"
-                android:textSize="14sp"/>
-            <View android:layout_width="25dp" android:layout_height="3dp" android:layout_marginTop="6dp" android:layout_marginBottom="2dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="待发货"
-                android:textColor="#666666"
-                android:textSize="14sp"/>
-            <View android:layout_width="25dp" android:layout_height="3dp" android:layout_marginTop="6dp" android:layout_marginBottom="2dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="已完成"
-                android:textColor="#666666"
-                android:textSize="14sp"/>
-            <View android:layout_width="25dp" android:layout_height="3dp" android:layout_marginTop="6dp" android:layout_marginBottom="2dp"/>
-        </LinearLayout>
+            android:text="暂无订单，快去大厅选购吧~"
+            android:textSize="16sp"
+            android:textColor="#999999"
+            android:layout_marginTop="15dp"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/order_recycler_view"
+        android:id="@+id/rv_order"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F5F5F5"
-        android:padding="10dp"
-        android:clipToPadding="false"/> </LinearLayout>
+        android:clipToPadding="false"
+        android:paddingBottom="20dp"/>
+</LinearLayout>
