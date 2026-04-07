@@ -1,4 +1,5 @@
 package com.example.agri_app.network;
+import com.example.agri_app.entity.LoginResponse;
 import com.example.agri_app.entity.Product;
 import com.example.agri_app.entity.Result;
 import com.example.agri_app.entity.User;
@@ -10,8 +11,8 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface ApiService {
-    @POST("/api/user/login")
-    Call<Result<User>> login(@Body User user);
+    @POST("/user/login")
+    Call<Result<LoginResponse>> login(@Body User user);
 
     @GET("/api/product/list")
     Call<Result<java.util.List<com.example.agri_app.entity.Product>>> getProductList(@retrofit2.http.Query("keyword") String keyword);
