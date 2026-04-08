@@ -3,79 +3,78 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#2196F3"
-    android:fitsSystemWindows="true">
+    android:background="#F5F5F5">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="180dp"
+        android:background="#4CAF50"
         android:gravity="center"
-        android:orientation="vertical">
-
-        <View
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@drawable/ic_launcher_background"
-            android:layout_marginBottom="15dp"/>
+        android:orientation="vertical"
+        android:elevation="4dp">
 
         <TextView
-            android:id="@+id/tv_username"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/ic_launcher_background"
+            android:gravity="center"
+            android:text="👤"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/tv_profile_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Admin (管理员)"
+            android:layout_marginTop="15dp"
+            android:text="加载中..."
+            android:textColor="#FFFFFF"
             android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"/>
+            android:textStyle="bold" />
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#F5F5F5">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:background="#FFFFFF">
 
-        <LinearLayout
-            android:id="@+id/menu_container"
+        <TextView
+            android:id="@+id/btn_go_to_orders"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="15dp"
-            android:background="#FFFFFF">
+            android:layout_height="60dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:text="📋  我的全部订单"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:background="?android:attr/selectableItemBackground"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:text="⚙️  账号设置"
-                android:gravity="center_vertical"
-                android:paddingLeft="20dp"
-                android:textSize="16sp"
-                android:textColor="#333333"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#EEEEEE"
-                android:layout_marginLeft="20dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:text="ℹ️  关于我们"
-                android:gravity="center_vertical"
-                android:paddingLeft="20dp"
-                android:textSize="16sp"
-                android:textColor="#333333"/>
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/btn_logout"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_below="@id/menu_container"
-            android:layout_margin="30dp"
-            android:text="退 出 登 录"
-            android:textSize="18sp"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#F44336"/>
+            android:layout_height="1dp"
+            android:layout_marginLeft="20dp"
+            android:background="#EEEEEE"/>
 
-    </RelativeLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:text="⚙️  系统设置 (待开发)"
+            android:textColor="#999999"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_margin="20dp"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="#F44336"
+        android:text="退出登录"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
 </LinearLayout>

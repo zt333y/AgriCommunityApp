@@ -16,8 +16,7 @@ public interface ApiService {
     @POST("/user/login")
     Call<Result<LoginResponse>> login(@Body User user);
 
-    // ✅ 修复：把原来 @GET("/api/product/list") 里的 /api 删掉！
-    @GET("/product/list")
+    @GET("/api/product/list")
     Call<Result<java.util.List<Product>>> getProductList(@Query("keyword") String keyword);
 
     // 加入购物车接口
@@ -35,4 +34,11 @@ public interface ApiService {
     // 查询订单列表
     @GET("/api/order/list")
     Call<Result<java.util.List<com.example.agri_app.entity.OrderVO>>> getOrderList(@Query("userId") Long userId);
+
+    // 用户注册接口
+    @POST("/user/register")
+    Call<Result<String>> register(@Body User user);
+
+    @POST("/api/admin/product/add") // 注意路径要和你后端 Controller 对应
+    Call<Result<String>> addProduct(@Body Product product); // 🌟 这里的 User 改成 Product
 }

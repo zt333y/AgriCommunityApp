@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="30dp"
+    android:gravity="center"
+    android:background="#F5F5F5">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="欢迎注册居民账号"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="#4CAF50"
+        android:layout_marginBottom="40dp"/>
+
+    <EditText
+        android:id="@+id/et_reg_username"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:hint="请输入用户名"
+        android:background="#FFFFFF"
+        android:padding="15dp"
+        android:layout_marginBottom="20dp"
+        android:elevation="2dp"/>
+
+    <EditText
+        android:id="@+id/et_reg_phone"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:hint="请输入11位手机号"
+        android:inputType="phone"
+        android:background="#FFFFFF"
+        android:padding="15dp"
+        android:layout_marginBottom="20dp"
+        android:elevation="2dp"/>
+
+    <EditText
+        android:id="@+id/et_reg_password"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:hint="请输入密码"
+        android:inputType="textPassword"
+        android:background="#FFFFFF"
+        android:padding="15dp"
+        android:layout_marginBottom="20dp"
+        android:elevation="2dp"/>
+
+    <EditText
+        android:id="@+id/et_reg_confirm_password"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:hint="请确认密码"
+        android:inputType="textPassword"
+        android:background="#FFFFFF"
+        android:padding="15dp"
+        android:layout_marginBottom="40dp"
+        android:elevation="2dp"/>
+
+    <Button
+        android:id="@+id/btn_register_submit"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="立即注册"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#4CAF50"/>
+</LinearLayout>

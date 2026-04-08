@@ -1,10 +1,15 @@
 package com.example.agri_app.adapter;
+
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
+import com.example.agri_app.ProductDetailActivity;
 import com.example.agri_app.R;
 import com.example.agri_app.entity.Product;
 import java.util.List;
@@ -26,30 +31,30 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Product p = productList.get(position);
-        holder.tvName.setText(p.name);
-        holder.tvDesc.setText(p.description);
-        holder.tvPrice.setText("￥" + p.price);
+        holder.tvName.setText(p.getName());
+        holder.tvDesc.setText(p.getDescription());
+        holder.tvPrice.setText("￥" + p.getPrice());
 
-        String testImageUrl = "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=300&q=80"; // 苹果的高清网图
+        // 🌟 核心：使用 Glide 加载图片
+        if (p.getImageUrl() != null && !p.getImageUrl().isEmpty()) {
+            Glide.with(holder.itemView.getContext())
+                    .load(p.getImageUrl())
+                    .placeholder(R.mipmap.ic_launcher) // 加载中显示的默认图
+                    .into(holder.ivImage);
+        } else {
+            holder.ivImage.setImageResource(R.mipmap.ic_launcher); // 如果没有图片，给个兜底图
+        }
 
-        com.bumptech.glide.Glide.with(holder.itemView.getContext())
-                .load(testImageUrl)
-                .into(holder.ivImage);
-
+        // 点击商品跳转到详情页
         holder.itemView.setOnClickListener(v -> {
-            // 创建一个 Intent 准备跳转到 ProductDetailActivity
-            android.content.Intent intent = new android.content.Intent(v.getContext(), com.example.agri_app.ProductDetailActivity.class);
-
-            // 把当前点击的商品信息“塞”进 Intent 里带过去
-            intent.putExtra("ID", p.id);
-            intent.putExtra("NAME", p.name);
-            intent.putExtra("PRICE", p.price);
-            intent.putExtra("DESC", p.description);
-            intent.putExtra("IMAGE_URL", testImageUrl);
-            // 开始跳转！
+            Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
+            intent.putExtra("ID", p.getId());
+            intent.putExtra("NAME", p.getName());
+            intent.putExtra("PRICE", p.getPrice());
+            intent.putExtra("DESC", p.getDescription());
+            intent.putExtra("IMAGE_URL", p.getImageUrl());
             v.getContext().startActivity(intent);
         });
-        // 👆 修改结束 👆
     }
 
     @Override
@@ -58,14 +63,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView ivImage;
         TextView tvName, tvDesc, tvPrice;
-        android.widget.ImageView ivImage;
+
         public ViewHolder(View view) {
             super(view);
-            tvName = view.findViewById(R.id.tv_name);
-            tvDesc = view.findViewById(R.id.tv_desc);
-            tvPrice = view.findViewById(R.id.tv_price);
             ivImage = view.findViewById(R.id.iv_product_image);
+            tvName = view.findViewById(R.id.tv_product_name);
+            tvDesc = view.findViewById(R.id.tv_product_desc);
+            tvPrice = view.findViewById(R.id.tv_product_price);
         }
     }
 }

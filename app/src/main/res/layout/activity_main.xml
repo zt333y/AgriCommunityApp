@@ -90,6 +90,15 @@
             android:backgroundTint="#FF9800"
             android:layout_marginTop="35dp"/>
 
+        <TextView
+            android:id="@+id/tv_go_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="没有账号？点击去注册"
+            android:textColor="#2196F3"
+            android:textSize="16sp"/>
+
     </LinearLayout>
     </androidx.cardview.widget.CardView>
 
