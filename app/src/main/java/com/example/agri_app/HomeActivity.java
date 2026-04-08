@@ -60,15 +60,16 @@ public class HomeActivity extends AppCompatActivity {
         // 🌟 6. 新增：跳转至【发布农产品】页面
         Button btnGoPublish = findViewById(R.id.btn_go_publish);
 
-        // 从本地缓存获取当前登录用户的角色 (假设你在登录成功时存入了 "role")
-        // role == 1 是农户 (对应你在论文 5.3 数据库表设计里的定义) [cite: 52, 228]
-            SharedPreferences sp = getSharedPreferences("user_info", MODE_PRIVATE);
+        // 🌟 核心修改：统一使用 "UserPrefs" 确保能读取到 MainActivity 存入的数据 [cite: 45, 198]
+        SharedPreferences sp = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        // 获取角色信息，默认为 0 (居民) [cite: 228]
         int role = sp.getInt("role", 0);
 
+        // 根据角色判断显隐：role == 1 代表农户
         if (role == 1) {
-            btnGoPublish.setVisibility(View.VISIBLE); // 农户可见
+            btnGoPublish.setVisibility(View.VISIBLE); // 农户可见 [cite: 118]
         } else {
-            btnGoPublish.setVisibility(View.GONE);    // 居民隐藏
+            btnGoPublish.setVisibility(View.GONE);    // 其他角色隐藏
         }
 
         btnGoPublish.setOnClickListener(v -> {

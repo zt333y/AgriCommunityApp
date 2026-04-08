@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView; // 🌟 引入了 TextView
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,11 +29,9 @@ public class MainActivity extends AppCompatActivity {
         EditText etPwd = findViewById(R.id.et_password);
         Button btnLogin = findViewById(R.id.btn_login);
 
-        // 🌟 新增：绑定“去注册”文字的点击事件
         TextView tvGoRegister = findViewById(R.id.tv_go_register);
         if (tvGoRegister != null) {
             tvGoRegister.setOnClickListener(v -> {
-                // 跳转到注册页面
                 startActivity(new Intent(MainActivity.this, RegisterActivity.class));
             });
         }
@@ -47,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            // 发起登录请求，返回类型必须匹配 ApiService 中的 Result<LoginResponse>
             RetrofitClient.getApi().login(new User(u, p)).enqueue(new Callback<Result<LoginResponse>>() {
                 @Override
                 public void onResponse(Call<Result<LoginResponse>> call, Response<Result<LoginResponse>> response) {
@@ -55,46 +52,50 @@ public class MainActivity extends AppCompatActivity {
 
                         LoginResponse loginData = response.body().data;
 
-                        // 【安全防御模式】：初始化默认值，防止后端返回数据缺失导致 App 闪退
-                        Long safeId = 1L; // 默认 ID
+                        // 初始化默认值
+                        Long safeId = 1L;
                         String safeUsername = u;
                         String safeToken = "";
+                        int safeRole = 0; // 🌟 新增：默认角色为居民(0)
 
-                        // 安全地解析嵌套的 LoginResponse 数据
                         if (loginData != null) {
-                            // 1. 提取并激活 Token（解决“请求被拦截”问题的关键）
+                            // 1. 提取并激活 Token
                             if (loginData.getToken() != null) {
                                 safeToken = loginData.getToken();
-                                // 将 Token 注入到 Retrofit 全局拦截器中
                                 RetrofitClient.setToken(safeToken);
                             }
 
-                            // 2. 提取用户信息
+                            // 2. 提取用户信息及角色
                             if (loginData.getUser() != null) {
-                                if (loginData.getUser().getId() != null) {
-                                    safeId = loginData.getUser().getId();
+                                User user = loginData.getUser();
+                                if (user.getId() != null) {
+                                    safeId = user.getId();
                                 }
-                                if (loginData.getUser().getUsername() != null) {
-                                    safeUsername = loginData.getUser().getUsername();
+                                if (user.getUsername() != null) {
+                                    safeUsername = user.getUsername();
+                                }
+                                // 🌟 核心修改：提取后端返回的角色字段
+                                if (user.getRole() != null) {
+                                    safeRole = user.getRole();
                                 }
                             }
                         }
 
                         // 3. 将重要信息持久化到手机本地缓存
+                        // 注意：这里使用 "UserPrefs" 必须与 HomeActivity 中读取的名称一致
                         SharedPreferences sp = getSharedPreferences("UserPrefs", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sp.edit();
                         editor.putLong("userId", safeId);
                         editor.putString("username", safeUsername);
                         editor.putString("token", safeToken);
+                        editor.putInt("role", safeRole); // 🌟 核心修改：存入角色信息
                         editor.apply();
 
                         Toast.makeText(MainActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
 
-                        // 4. 跳转到商品大厅（HomeActivity）
                         startActivity(new Intent(MainActivity.this, HomeActivity.class));
-                        finish(); // 销毁登录页，防止用户按返回键回到登录界面
+                        finish();
                     } else {
-                        // 登录业务失败处理
                         String errorMsg = (response.body() != null) ? response.body().msg : "未知错误";
                         Toast.makeText(MainActivity.this, "登录失败: " + errorMsg, Toast.LENGTH_SHORT).show();
                     }
@@ -102,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<Result<LoginResponse>> call, Throwable t) {
-                    // 网络请求失败处理（如服务器未启动或 IP 错误）
                     Toast.makeText(MainActivity.this, "网络错误: " + t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
