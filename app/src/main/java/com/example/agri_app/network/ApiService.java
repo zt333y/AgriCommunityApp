@@ -39,6 +39,10 @@ public interface ApiService {
     @POST("/user/register")
     Call<Result<String>> register(@Body User user);
 
-    @POST("/api/admin/product/add") // 注意路径要和你后端 Controller 对应
-    Call<Result<String>> addProduct(@Body Product product); // 🌟 这里的 User 改成 Product
+    @POST("/api/product/add")
+    Call<Result<String>> addProduct(@Body Product product);
+
+    // 🌟 新增：确认收货接口
+    @POST("/api/order/receive")
+    Call<Result<String>> receiveOrder(@Query("orderId") Long orderId);
 }

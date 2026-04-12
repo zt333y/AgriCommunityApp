@@ -44,25 +44,32 @@ public class PublishActivity extends AppCompatActivity {
                 return;
             }
 
-            // 3. 组装要发送给后端的 Product 对象 (注意：确保你的前端 Product 实体类里有这些字段的 set 方法)
+            // 🌟 3. 新增：从缓存中取出当前登录的农户 ID（默认给3是为了防呆，3是数据库里李大爷的ID）
+            android.content.SharedPreferences sp = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+            long userId = sp.getLong("userId", 3L);
+
+            // 4. 组装要发送给后端的 Product 对象
             Product newProduct = new Product();
+            newProduct.setFarmerId(userId); // 🌟🌟🌟 核心修复：把农户 ID 塞进去！
             newProduct.setName(name);
             newProduct.setCategory(etCategory.getText().toString().trim());
-            newProduct.setPrice(Double.parseDouble(priceStr)); // 🌟 换成转换成 Double
+            newProduct.setPrice(Double.parseDouble(priceStr));
             newProduct.setStock(Integer.parseInt(stockStr));
             newProduct.setUnit(etUnit.getText().toString().trim());
             newProduct.setImageUrl(etImage.getText().toString().trim());
             newProduct.setDescription(etDesc.getText().toString().trim());
 
-            // 4. 发起网络请求
+            // 5. 发起网络请求
             RetrofitClient.getApi().addProduct(newProduct).enqueue(new Callback<Result<String>>() {
                 @Override
                 public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
                     if (response.body() != null && response.body().code == 200) {
-                        Toast.makeText(PublishActivity.this, "🎉 " + response.body().msg, Toast.LENGTH_LONG).show();
-                        finish(); // 发布成功，关闭页面
+                        Toast.makeText(PublishActivity.this, "🎉 发布成功，请等待审核", Toast.LENGTH_LONG).show();
+                        finish();
                     } else {
-                        Toast.makeText(PublishActivity.this, "发布失败", Toast.LENGTH_SHORT).show();
+                        // 🌟 修改：如果失败，把后端传回来的真正死因（msg）打印在屏幕上
+                        String errorMsg = response.body() != null ? response.body().msg : "未知状态";
+                        Toast.makeText(PublishActivity.this, "发布失败: " + errorMsg, Toast.LENGTH_LONG).show();
                     }
                 }
                 @Override

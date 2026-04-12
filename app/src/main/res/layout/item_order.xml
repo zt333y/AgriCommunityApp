@@ -54,5 +54,21 @@
             android:textColor="#F44336"
             android:textSize="18sp"
             android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/btn_receive"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@id/tv_order_amount"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:text="确认收货"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#4CAF50"
+            android:textSize="12sp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:visibility="gone" />
+
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
