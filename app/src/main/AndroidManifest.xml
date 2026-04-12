@@ -32,8 +32,8 @@
         <activity android:name=".ProfileActivity" android:exported="false" />
         <activity android:name=".RegisterActivity" android:exported="false" />
         <activity android:name=".PublishActivity" android:exported="false" />
-
         <activity android:name=".MyProductsActivity" android:exported="false" />
+        <activity android:name=".ReviewActivity" android:exported="false" />
 
     </application>
 </manifest>

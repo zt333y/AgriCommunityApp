@@ -66,23 +66,34 @@ public class MyProductAdapter extends RecyclerView.Adapter<MyProductAdapter.View
             holder.tvStatusBadge.setBackgroundColor(Color.parseColor("#F44336")); // 红色
         }
 
-        // 4. 🌟 处理删除按钮的点击事件
+// 4. 🌟 处理删除按钮的点击事件
         holder.itemView.findViewById(R.id.btn_delete).setOnClickListener(v -> {
+
+            // 🌟 核心修复点 1：在点击瞬间，获取这个卡片此时此刻的真实位置！
+            int currentPosition = holder.getAdapterPosition();
+
+            // 🌟 核心修复点 2：防止用户疯狂连击导致下标越界崩溃
+            if (currentPosition == RecyclerView.NO_POSITION) return;
+
+            // 重新获取正确的商品对象
+            Product currentProduct = productList.get(currentPosition);
+
             // 弹出确认对话框
             new AlertDialog.Builder(v.getContext())
                     .setTitle("操作确认")
-                    .setMessage("确定要下架/删除商品 [" + product.getName() + "] 吗？删除后不可恢复。")
+                    .setMessage("确定要下架/删除商品 [" + currentProduct.getName() + "] 吗？删除后不可恢复。")
                     .setPositiveButton("确定", (dialog, which) -> {
                         // 发起网络请求删除商品
-                        RetrofitClient.getApi().deleteProduct(product.getId()).enqueue(new Callback<Result<String>>() {
+                        RetrofitClient.getApi().deleteProduct(currentProduct.getId()).enqueue(new Callback<Result<String>>() {
                             @Override
                             public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
                                 if (response.body() != null && response.body().code == 200) {
                                     Toast.makeText(v.getContext(), "删除成功", Toast.LENGTH_SHORT).show();
-                                    // 从列表中移除并刷新动画
-                                    productList.remove(position);
-                                    notifyItemRemoved(position);
-                                    notifyItemRangeChanged(position, productList.size());
+
+                                    // 🌟 核心修复点 3：使用最新的 currentPosition 去删除和刷新
+                                    productList.remove(currentPosition);
+                                    notifyItemRemoved(currentPosition);
+                                    notifyItemRangeChanged(currentPosition, productList.size());
                                 } else {
                                     Toast.makeText(v.getContext(), "删除失败", Toast.LENGTH_SHORT).show();
                                 }

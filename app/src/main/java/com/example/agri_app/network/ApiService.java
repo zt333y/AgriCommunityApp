@@ -53,4 +53,8 @@ public interface ApiService {
     // 🌟 新增：删除/下架商品接口
     @POST("/api/product/delete")
     Call<Result<String>> deleteProduct(@Query("id") Long id);
+
+    // 🌟 新增：提交评价接口
+    @retrofit2.http.POST("/api/review/add")
+    Call<Result<String>> addReview(@retrofit2.http.Body com.example.agri_app.entity.Review review);
 }
