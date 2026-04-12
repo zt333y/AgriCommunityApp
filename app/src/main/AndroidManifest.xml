@@ -34,6 +34,7 @@
         <activity android:name=".PublishActivity" android:exported="false" />
         <activity android:name=".MyProductsActivity" android:exported="false" />
         <activity android:name=".ReviewActivity" android:exported="false" />
+        <activity android:name=".GroupLeaderActivity" android:exported="false" />
 
     </application>
 </manifest>

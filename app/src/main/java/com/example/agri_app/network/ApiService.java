@@ -57,4 +57,16 @@ public interface ApiService {
     // 🌟 新增：提交评价接口
     @retrofit2.http.POST("/api/review/add")
     Call<Result<String>> addReview(@retrofit2.http.Body com.example.agri_app.entity.Review review);
+
+    // 🌟 团长获取订单列表
+    @GET("/api/order/leaderList")
+    Call<Result<java.util.List<OrderVO>>> getLeaderOrders();
+
+    // 🌟 团长确认到货 (入库)
+    @POST("/api/order/arrive")
+    Call<Result<String>> arriveOrder(@Query("orderId") Long orderId);
+
+    // 🌟 团长核销订单 (出库)
+    @POST("/api/order/verify")
+    Call<Result<String>> verifyOrder(@Query("orderId") Long orderId);
 }
