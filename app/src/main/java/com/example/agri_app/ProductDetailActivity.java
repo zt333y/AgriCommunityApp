@@ -37,15 +37,25 @@ public class ProductDetailActivity extends AppCompatActivity {
 
 // 4. 给加入购物车按钮设置真实的点击事件！
         btnAddCart.setOnClickListener(v -> {
-            // 假设当前登录的用户ID是 1 (系统管理员admin)，固定数量为 1 份
-            com.example.agri_app.entity.Cart cart = new com.example.agri_app.entity.Cart(1L, productId, 1);
+            // 🌟 核心修复：从本地缓存提取真实登录用户的 ID
+            android.content.SharedPreferences sp = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+            // 尝试获取保存的 userId，如果没取到（没登录），默认返回 -1
+            long currentUserId = sp.getLong("userId", -1L);
+
+            if (currentUserId == -1L) {
+                Toast.makeText(ProductDetailActivity.this, "请先登录！", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // 🌟 核心修复：把获取到的真实 currentUserId 放进购物车对象里
+            com.example.agri_app.entity.Cart cart = new com.example.agri_app.entity.Cart(currentUserId, productId, 1);
 
             // 发起网络请求
             com.example.agri_app.network.RetrofitClient.getApi().addCart(cart).enqueue(new retrofit2.Callback<com.example.agri_app.entity.Result<String>>() {
                 @Override
                 public void onResponse(retrofit2.Call<com.example.agri_app.entity.Result<String>> call, retrofit2.Response<com.example.agri_app.entity.Result<String>> response) {
                     if (response.body() != null && response.body().code == 200) {
-                        Toast.makeText(ProductDetailActivity.this, "太棒了！已存入数据库购物车！", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ProductDetailActivity.this, "太棒了！已加入您的购物车！", Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(ProductDetailActivity.this, "加入失败", Toast.LENGTH_SHORT).show();
                     }

@@ -30,8 +30,10 @@
         <activity android:name=".CartActivity" android:exported="false"/>
         <activity android:name=".OrderActivity" android:exported="false" />
         <activity android:name=".ProfileActivity" android:exported="false" />
-
         <activity android:name=".RegisterActivity" android:exported="false" />
         <activity android:name=".PublishActivity" android:exported="false" />
+
+        <activity android:name=".MyProductsActivity" android:exported="false" />
+
     </application>
 </manifest>

@@ -1,80 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#F5F5F5">
+    android:background="#F5F7FA"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:background="#4CAF50"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:elevation="4dp">
+        android:layout_height="200dp"
+        android:background="#304156"
+        android:padding="20dp">
+
+        <ImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_launcher_round" /> <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@id/iv_avatar"
+        android:orientation="vertical">
 
         <TextView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:background="@drawable/ic_launcher_background"
-            android:gravity="center"
-            android:text="👤"
-            android:textSize="40sp" />
-
-        <TextView
-            android:id="@+id/tv_profile_username"
+            android:id="@+id/tv_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="加载中..."
+            android:text="未登录"
             android:textColor="#FFFFFF"
             android:textSize="22sp"
             android:textStyle="bold" />
-    </LinearLayout>
 
-    <LinearLayout
+        <TextView
+            android:id="@+id/tv_role_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="#4CAF50"
+            android:paddingLeft="8dp"
+            android:paddingTop="2dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="2dp"
+            android:text="社区居民"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+    </LinearLayout>
+    </RelativeLayout>
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical"
-        android:background="#FFFFFF">
+        android:layout_margin="15dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="2dp">
 
-        <TextView
-            android:id="@+id/btn_go_to_orders"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="20dp"
-            android:text="📋  我的全部订单"
-            android:textColor="#333333"
-            android:textSize="16sp"
-            android:background="?android:attr/selectableItemBackground"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="20dp"
-            android:background="#EEEEEE"/>
+            <TextView
+                android:id="@+id/btn_my_orders"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:text="📦 我的订单"
+                android:textColor="#333333"
+                android:textSize="16sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="20dp"
-            android:text="⚙️  系统设置 (待开发)"
-            android:textColor="#999999"
-            android:textSize="16sp" />
-    </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#EEEEEE" />
+
+            <TextView
+                android:id="@+id/btn_my_cart"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:text="🛒 我的购物车"
+                android:textColor="#333333"
+                android:textSize="16sp" />
+
+            <View
+                android:id="@+id/line_farmer"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#EEEEEE"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/btn_my_products"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:text="📦 我的商品库 (农户专属)"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <Button
         android:id="@+id/btn_logout"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_margin="20dp"
-        android:layout_marginTop="40dp"
-        android:backgroundTint="#F44336"
-        android:text="退出登录"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="30dp"
+        android:backgroundTint="#F56C6C"
+        android:text="安 全 退 出"
         android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
 </LinearLayout>

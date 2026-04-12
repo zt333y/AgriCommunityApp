@@ -45,4 +45,12 @@ public interface ApiService {
     // 🌟 新增：确认收货接口
     @POST("/api/order/receive")
     Call<Result<String>> receiveOrder(@Query("orderId") Long orderId);
+
+    // 🌟 新增：农户获取自己发布的商品库
+    @GET("/api/product/my")
+    Call<Result<java.util.List<Product>>> getMyProducts();
+
+    // 🌟 新增：删除/下架商品接口
+    @POST("/api/product/delete")
+    Call<Result<String>> deleteProduct(@Query("id") Long id);
 }
