@@ -59,15 +59,19 @@ public class PublishActivity extends AppCompatActivity {
             newProduct.setImageUrl(etImage.getText().toString().trim());
             newProduct.setDescription(etDesc.getText().toString().trim());
 
-            // 5. 发起网络请求
+// 5. 发起网络请求
             RetrofitClient.getApi().addProduct(newProduct).enqueue(new Callback<Result<String>>() {
                 @Override
                 public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
                     if (response.body() != null && response.body().code == 200) {
-                        Toast.makeText(PublishActivity.this, "🎉 发布成功，请等待审核", Toast.LENGTH_LONG).show();
-                        finish();
+                        Toast.makeText(PublishActivity.this, "🎉 发布成功！已提交平台审核", Toast.LENGTH_LONG).show();
+
+                        // 🌟 核心优化：发布成功后，自动跳转到"我的商品库"，让农户第一时间看到审核状态
+                        android.content.Intent intent = new android.content.Intent(PublishActivity.this, MyProductsActivity.class);
+                        startActivity(intent);
+
+                        finish(); // 关闭当前的发布页面
                     } else {
-                        // 🌟 修改：如果失败，把后端传回来的真正死因（msg）打印在屏幕上
                         String errorMsg = response.body() != null ? response.body().msg : "未知状态";
                         Toast.makeText(PublishActivity.this, "发布失败: " + errorMsg, Toast.LENGTH_LONG).show();
                     }
