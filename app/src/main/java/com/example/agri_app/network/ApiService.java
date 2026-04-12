@@ -1,6 +1,7 @@
 package com.example.agri_app.network;
 
 import com.example.agri_app.entity.LoginResponse;
+import com.example.agri_app.entity.OrderVO;
 import com.example.agri_app.entity.Product;
 import com.example.agri_app.entity.Result;
 import com.example.agri_app.entity.User;
