@@ -35,11 +35,41 @@
             android:layout_marginLeft="10dp"/>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ll_notice_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_top_bar"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:background="#FFF3E0"
+        android:gravity="center_vertical"
+        android:layout_margin="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📢 最新公告："
+            android:textColor="#FF9800"
+            android:textStyle="bold"
+            android:textSize="14sp"/>
+
+        <ViewFlipper
+            android:id="@+id/vf_notice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:flipInterval="3000"
+            android:inAnimation="@android:anim/slide_in_left"
+            android:outAnimation="@android:anim/slide_out_right"
+            android:autoStart="true" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ll_top_bar"
+        android:layout_below="@id/ll_notice_bar"
         android:layout_above="@id/ll_bottom_bar"
         android:padding="10dp"
         android:clipToPadding="false"/>

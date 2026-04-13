@@ -2,6 +2,7 @@ package com.example.agri_app.network;
 
 import com.example.agri_app.entity.Apply;
 import com.example.agri_app.entity.LoginResponse;
+import com.example.agri_app.entity.Notice;
 import com.example.agri_app.entity.OrderVO;
 import com.example.agri_app.entity.Product;
 import com.example.agri_app.entity.Result;
@@ -75,4 +76,7 @@ public interface ApiService {
     // 用户提交资质入驻申请
     @POST("/api/apply/submit")
     Call<Result<String>> submitApply(@Body Apply apply);
+
+    @GET("api/notice/list")
+    Call<Result<List<Notice>>> getNoticeList();
 }
