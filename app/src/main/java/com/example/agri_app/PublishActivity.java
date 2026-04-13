@@ -1,20 +1,21 @@
 package com.example.agri_app;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.agri_app.entity.Product;
+import com.example.agri_app.entity.Result;
 import com.example.agri_app.network.RetrofitClient;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import java.math.BigDecimal;
-
-// 🌟 核心：就是少了下面这两句！请把它们加上（注意包名如果是 entity 或者 common 根据你的实际情况稍微对一下）
-import com.example.agri_app.entity.Product;
-import com.example.agri_app.entity.Result;
 
 public class PublishActivity extends AppCompatActivity {
 
@@ -23,6 +24,7 @@ public class PublishActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
 
+        // 绑定控件
         EditText etName = findViewById(R.id.et_pub_name);
         EditText etCategory = findViewById(R.id.et_pub_category);
         EditText etPrice = findViewById(R.id.et_pub_price);
@@ -33,52 +35,66 @@ public class PublishActivity extends AppCompatActivity {
         Button btnPublish = findViewById(R.id.btn_publish);
 
         btnPublish.setOnClickListener(v -> {
-            // 1. 抓取输入框的值
+            // 1. 获取输入值
             String name = etName.getText().toString().trim();
+            String category = etCategory.getText().toString().trim();
             String priceStr = etPrice.getText().toString().trim();
             String stockStr = etStock.getText().toString().trim();
+            String unit = etUnit.getText().toString().trim();
+            String imageUrl = etImage.getText().toString().trim();
+            String desc = etDesc.getText().toString().trim();
 
-            // 2. 简单防空校验
-            if (name.isEmpty() || priceStr.isEmpty() || stockStr.isEmpty()) {
-                Toast.makeText(this, "必填项不能为空", Toast.LENGTH_SHORT).show();
+            // 2. 严格的防空校验
+            if (name.isEmpty() || priceStr.isEmpty() || stockStr.isEmpty() || category.isEmpty()) {
+                Toast.makeText(this, "商品名称、分类、价格和库存为必填项", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // 🌟 3. 新增：从缓存中取出当前登录的农户 ID（默认给3是为了防呆，3是数据库里李大爷的ID）
-            android.content.SharedPreferences sp = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-            long userId = sp.getLong("userId", 3L);
+            // 3. 获取当前登录的农户 ID
+            SharedPreferences sp = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+            long farmerId = sp.getLong("userId", 0L); // 默认 0，后端如果收到 0 应该报错
 
-            // 4. 组装要发送给后端的 Product 对象
+            if (farmerId == 0) {
+                Toast.makeText(this, "未检测到有效登录状态，请重新登录", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // 4. 组装实体对象
             Product newProduct = new Product();
-            newProduct.setFarmerId(userId); // 🌟🌟🌟 核心修复：把农户 ID 塞进去！
+            newProduct.setFarmerId(farmerId);
             newProduct.setName(name);
-            newProduct.setCategory(etCategory.getText().toString().trim());
-            newProduct.setPrice(Double.parseDouble(priceStr));
-            newProduct.setStock(Integer.parseInt(stockStr));
-            newProduct.setUnit(etUnit.getText().toString().trim());
-            newProduct.setImageUrl(etImage.getText().toString().trim());
-            newProduct.setDescription(etDesc.getText().toString().trim());
+            newProduct.setCategory(category);
+            newProduct.setUnit(unit);
+            newProduct.setImageUrl(imageUrl.isEmpty() ? "https://img14.360buyimg.com/n0/jfs/t1/133282/22/16543/123165/5f9780a4Eeb76451a/10f215dff7677db0.jpg" : imageUrl);
+            newProduct.setDescription(desc);
 
-// 5. 发起网络请求
+            try {
+                newProduct.setPrice(Double.parseDouble(priceStr));
+                newProduct.setStock(Integer.parseInt(stockStr));
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "价格或库存格式输入错误", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // 5. 提交至后端审核
             RetrofitClient.getApi().addProduct(newProduct).enqueue(new Callback<Result<String>>() {
                 @Override
                 public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
                     if (response.body() != null && response.body().code == 200) {
                         Toast.makeText(PublishActivity.this, "🎉 发布成功！已提交平台审核", Toast.LENGTH_LONG).show();
 
-                        // 🌟 核心优化：发布成功后，自动跳转到"我的商品库"，让农户第一时间看到审核状态
-                        android.content.Intent intent = new android.content.Intent(PublishActivity.this, MyProductsActivity.class);
-                        startActivity(intent);
-
-                        finish(); // 关闭当前的发布页面
+                        // 自动跳转到“我的商品库”页面
+                        startActivity(new Intent(PublishActivity.this, MyProductsActivity.class));
+                        finish();
                     } else {
-                        String errorMsg = response.body() != null ? response.body().msg : "未知状态";
+                        String errorMsg = response.body() != null ? response.body().msg : "未知错误";
                         Toast.makeText(PublishActivity.this, "发布失败: " + errorMsg, Toast.LENGTH_LONG).show();
                     }
                 }
+
                 @Override
                 public void onFailure(Call<Result<String>> call, Throwable t) {
-                    Toast.makeText(PublishActivity.this, "网络错误: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PublishActivity.this, "网络错误: 请检查服务器是否启动", Toast.LENGTH_SHORT).show();
                 }
             });
         });

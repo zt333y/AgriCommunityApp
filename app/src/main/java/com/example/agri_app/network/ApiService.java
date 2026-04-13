@@ -1,5 +1,6 @@
 package com.example.agri_app.network;
 
+import com.example.agri_app.entity.Apply;
 import com.example.agri_app.entity.LoginResponse;
 import com.example.agri_app.entity.OrderVO;
 import com.example.agri_app.entity.Product;
@@ -70,4 +71,8 @@ public interface ApiService {
     // 🌟 团长核销订单 (出库)
     @POST("/api/order/verify")
     Call<Result<String>> verifyOrder(@Query("orderId") Long orderId);
+
+    // 用户提交资质入驻申请
+    @POST("/api/apply/submit")
+    Call<Result<String>> submitApply(@Body Apply apply);
 }

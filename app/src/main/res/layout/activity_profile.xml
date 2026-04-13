@@ -92,6 +92,26 @@
                 android:textSize="16sp" />
 
             <View
+                android:id="@+id/line_apply"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#EEEEEE"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/btn_apply_role"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:text="📝 资质入驻申请 (农户/团长)"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+            <View
                 android:id="@+id/line_farmer"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -106,7 +126,7 @@
                 android:clickable="true"
                 android:gravity="center_vertical"
                 android:paddingLeft="20dp"
-                android:text="📦 我的商品库 (农户专属)"
+                android:text="📦 管理功能入口"
                 android:textColor="#333333"
                 android:textSize="16sp"
                 android:visibility="gone" />
