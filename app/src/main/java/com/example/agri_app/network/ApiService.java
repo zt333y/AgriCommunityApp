@@ -79,4 +79,8 @@ public interface ApiService {
 
     @GET("api/notice/list")
     Call<Result<List<Notice>>> getNoticeList();
+
+    // 🌟 新增：农户获取今日采摘/发货汇总清单
+    @GET("/api/order/pickingList")
+    Call<Result<java.util.List<com.example.agri_app.entity.FarmerPickingVO>>> getPickingList();
 }

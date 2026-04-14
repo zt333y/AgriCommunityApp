@@ -1,131 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5"
-    android:fitsSystemWindows="true">
+    android:background="#F5F7FA">
 
-    <LinearLayout
-        android:id="@+id/ll_top_bar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        android:background="#4CAF50"
-        android:gravity="center_vertical">
-
-        <EditText
-            android:id="@+id/et_search"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:background="#FFFFFF"
-            android:hint=" 🔍 输入商品名称搜索..."
-            android:paddingLeft="10dp"
-            android:textSize="14sp"
-            android:singleLine="true"/>
-
-        <Button
-            android:id="@+id/btn_search"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="搜 索"
-            android:backgroundTint="#FF9800"
-            android:textColor="#FFFFFF"
-            android:layout_marginLeft="10dp"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_notice_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ll_top_bar"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        android:background="#FFF3E0"
-        android:gravity="center_vertical"
-        android:layout_margin="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="📢 最新公告："
-            android:textColor="#FF9800"
-            android:textStyle="bold"
-            android:textSize="14sp"/>
-
-        <ViewFlipper
-            android:id="@+id/vf_notice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:flipInterval="3000"
-            android:inAnimation="@android:anim/slide_in_left"
-            android:outAnimation="@android:anim/slide_out_right"
-            android:autoStart="true" />
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ll_notice_bar"
-        android:layout_above="@id/ll_bottom_bar"
-        android:padding="10dp"
-        android:clipToPadding="false"/>
+        android:layout_above="@id/bottom_navigation" />
 
-    <Button
-        android:id="@+id/btn_go_publish"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_above="@id/ll_bottom_bar"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/shape_circle_orange"
-        android:text="➕"
-        android:textSize="25sp"
-        android:textColor="#FFFFFF"
-        android:elevation="8dp" />
-
-    <LinearLayout
-        android:id="@+id/ll_bottom_bar"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
         android:background="#FFFFFF"
-        android:elevation="15dp">
-
-        <Button
-            android:id="@+id/btn_go_cart"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="🛒 购物车"
-            android:textColor="#FF9800"
-            android:textSize="14sp"/>
-
-        <Button
-            android:id="@+id/btn_go_order"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="📋 订 单"
-            android:textColor="#2196F3"
-            android:textSize="14sp"/>
-
-        <Button
-            android:id="@+id/btn_go_profile"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="👤 我 的"
-            android:textColor="#4CAF50"
-            android:textSize="14sp"/>
-    </LinearLayout>
+        app:elevation="8dp"
+        app:menu="@menu/bottom_nav_menu"
+        app:labelVisibilityMode="labeled"
+        app:itemIconTint="@color/nav_item_color"
+        app:itemTextColor="@color/nav_item_color" />
 
 </RelativeLayout>

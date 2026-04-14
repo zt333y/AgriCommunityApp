@@ -36,6 +36,7 @@
         <activity android:name=".ReviewActivity" android:exported="false" />
         <activity android:name=".GroupLeaderActivity" android:exported="false" />
         <activity android:name=".ApplyActivity" android:exported="false" />
+        <activity android:name=".PickingListActivity" android:exported="false" />
 
     </application>
 </manifest>

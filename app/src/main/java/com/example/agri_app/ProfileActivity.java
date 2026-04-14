@@ -67,18 +67,22 @@ public class ProfileActivity extends AppCompatActivity {
                 if (lineApply != null) lineApply.setVisibility(View.VISIBLE);
                 break;
 
-            case 1: // 🌾 入驻农户 (Role 1)
+            case 1: // 🌾 入驻农户
                 tvRoleBadge.setText("🌾 入驻农户");
-                tvRoleBadge.setBackgroundColor(Color.parseColor("#FF9800")); // 橙色
+                tvRoleBadge.setBackgroundColor(Color.parseColor("#FF9800"));
 
-                // 显示农户专属功能
+                // 1. 设置原有的商品库管理
                 btnManagement.setText("📦 我的商品库管理");
                 btnManagement.setVisibility(View.VISIBLE);
-                if (lineFarmer != null) lineFarmer.setVisibility(View.VISIBLE);
+                btnManagement.setOnClickListener(v -> startActivity(new Intent(this, MyProductsActivity.class)));
 
-                btnManagement.setOnClickListener(v -> {
-                    startActivity(new Intent(this, MyProductsActivity.class));
-                });
+                // 🌟 2. 动态新增采摘报表按钮 (这里你可以复用布局里的其他 TextView 或者手动在 XML 加一个)
+                // 假设我们在 XML 里增加了一个名为 btn_picking_summary 的 TextView
+                TextView btnPicking = findViewById(R.id.btn_picking_summary); // 请确保 XML 有此 ID
+                if (btnPicking != null) {
+                    btnPicking.setVisibility(View.VISIBLE);
+                    btnPicking.setOnClickListener(v -> startActivity(new Intent(this, PickingListActivity.class)));
+                }
                 break;
 
             case 2: // 👨‍👩‍👧‍👦 社区团长 (Role 2)
