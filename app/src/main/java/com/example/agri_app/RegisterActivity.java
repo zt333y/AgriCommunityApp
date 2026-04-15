@@ -52,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
             // 组装数据并发送请求
             User newUser = new User(u, p);
             newUser.setPhone(phone);
-
+            newUser.setRole(0);
             RetrofitClient.getApi().register(newUser).enqueue(new Callback<Result<String>>() {
                 @Override
                 public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
