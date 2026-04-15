@@ -83,4 +83,8 @@ public interface ApiService {
     // 🌟 新增：农户获取今日采摘/发货汇总清单
     @GET("/api/order/pickingList")
     Call<Result<java.util.List<com.example.agri_app.entity.FarmerPickingVO>>> getPickingList();
+
+    // 🌟 农户专属：根据商品一键发货
+    @POST("/api/order/shipByProduct")
+    Call<Result<String>> shipByProduct(@Query("productId") Long productId);
 }
