@@ -82,6 +82,23 @@
                 android:background="#EEEEEE" />
 
             <TextView
+                android:id="@+id/btn_my_address"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:text="📍 我的收货地址"
+                android:textColor="#333333"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#EEEEEE" />
+
+            <TextView
                 android:id="@+id/btn_my_cart"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"

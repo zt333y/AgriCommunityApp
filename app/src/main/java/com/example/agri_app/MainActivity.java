@@ -82,13 +82,20 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         // 3. 将重要信息持久化到手机本地缓存
-                        // 注意：这里使用 "UserPrefs" 必须与 HomeActivity 中读取的名称一致
                         SharedPreferences sp = getSharedPreferences("UserPrefs", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sp.edit();
                         editor.putLong("userId", safeId);
                         editor.putString("username", safeUsername);
                         editor.putString("token", safeToken);
-                        editor.putInt("role", safeRole); // 🌟 核心修改：存入角色信息
+                        editor.putInt("role", safeRole);
+
+                        // 🌟 核心新增：登录时同步获取后端的收货地址
+                        if (loginData.getUser() != null && loginData.getUser().getAddress() != null) {
+                            editor.putString("address", loginData.getUser().getAddress());
+                        } else {
+                            editor.putString("address", ""); // 没有地址就清空
+                        }
+
                         editor.apply();
 
                         Toast.makeText(MainActivity.this, "登录成功", Toast.LENGTH_SHORT).show();

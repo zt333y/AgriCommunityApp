@@ -30,9 +30,9 @@ public interface ApiService {
     @GET("/api/cart/list")
     Call<Result<java.util.List<com.example.agri_app.entity.CartVO>>> getCartList(@Query("userId") Long userId);
 
-    // 结账生成订单
+    // 结账生成订单 (🌟 新增传入 address 参数)
     @POST("/api/order/create")
-    Call<Result<String>> createOrder(@Query("userId") Long userId);
+    Call<Result<String>> createOrder(@Query("userId") Long userId, @Query("address") String address);
 
     // 查询订单列表
     @GET("/api/order/list")
@@ -87,4 +87,8 @@ public interface ApiService {
     // 🌟 农户专属：根据商品一键发货
     @POST("/api/order/shipByProduct")
     Call<Result<String>> shipByProduct(@Query("productId") Long productId);
+
+    // 🌟 新增：更新用户收货地址
+    @POST("/user/updateAddress")
+    Call<Result<String>> updateAddress(@Query("userId") Long userId, @Query("address") String address);
 }

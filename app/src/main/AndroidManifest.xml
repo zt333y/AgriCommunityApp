@@ -27,9 +27,7 @@
 
         <activity android:name=".HomeActivity" android:exported="false" />
         <activity android:name=".ProductDetailActivity" android:exported="false" />
-        <activity android:name=".CartActivity" android:exported="false"/>
         <activity android:name=".OrderActivity" android:exported="false" />
-        <activity android:name=".ProfileActivity" android:exported="false" />
         <activity android:name=".RegisterActivity" android:exported="false" />
         <activity android:name=".PublishActivity" android:exported="false" />
         <activity android:name=".MyProductsActivity" android:exported="false" />
@@ -37,6 +35,7 @@
         <activity android:name=".GroupLeaderActivity" android:exported="false" />
         <activity android:name=".ApplyActivity" android:exported="false" />
         <activity android:name=".PickingListActivity" android:exported="false" />
+        <activity android:name=".AddressActivity" android:exported="false" />
 
     </application>
 </manifest>
