@@ -13,6 +13,9 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import okhttp3.MultipartBody;
+import retrofit2.http.Multipart;
+import retrofit2.http.Part;
 
 public interface ApiService {
 
@@ -41,6 +44,11 @@ public interface ApiService {
     // 用户注册接口
     @POST("/user/register")
     Call<Result<String>> register(@Body User user);
+
+    // 🌟 新增：专门用来上传图片的接口
+    @Multipart
+    @POST("/api/file/upload")
+    Call<Result<String>> uploadImage(@Part MultipartBody.Part file);
 
     @POST("/api/product/add")
     Call<Result<String>> addProduct(@Body Product product);

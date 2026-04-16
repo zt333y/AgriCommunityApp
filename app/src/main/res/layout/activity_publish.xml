@@ -29,7 +29,30 @@
 
         <EditText android:id="@+id/et_pub_unit" android:layout_width="match_parent" android:layout_height="50dp" android:hint="计量单位 (如: 斤 / 箱 / 枚)" android:background="#FFFFFF" android:padding="10dp" android:layout_marginBottom="10dp"/>
 
-        <EditText android:id="@+id/et_pub_image" android:layout_width="match_parent" android:layout_height="50dp" android:hint="图片网络链接 (必填)" android:text="https://img14.360buyimg.com/n0/jfs/t1/133282/22/16543/123165/5f9780a4Eeb76451a/10f215dff7677db0.jpg" android:background="#FFFFFF" android:padding="10dp" android:layout_marginBottom="10dp"/>
+        <FrameLayout
+            android:id="@+id/layout_image_picker"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="#EAEAEA"
+            android:layout_marginBottom="10dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/iv_pub_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/tv_image_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📸 点击打开相册选择商品图片"
+                android:textSize="16sp"
+                android:textColor="#888888"
+                android:layout_gravity="center"/>
+        </FrameLayout>
 
         <EditText android:id="@+id/et_pub_desc" android:layout_width="match_parent" android:layout_height="100dp" android:hint="商品详细描述..." android:gravity="top|left" android:background="#FFFFFF" android:padding="10dp" android:layout_marginBottom="20dp"/>
 

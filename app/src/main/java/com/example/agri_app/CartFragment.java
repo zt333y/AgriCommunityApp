@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import com.example.agri_app.adapter.CartAdapter;
 import com.example.agri_app.entity.CartVO;
 import com.example.agri_app.entity.Result;
 import com.example.agri_app.network.RetrofitClient;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.List;
 
@@ -28,6 +30,10 @@ import retrofit2.Response;
 
 public class CartFragment extends Fragment {
     private RecyclerView recyclerView;
+    private List<CartVO> currentCartList;
+
+    // 🌟 新增：绑定合计金额的 TextView
+    private TextView tvTotalPrice;
 
     @Nullable
     @Override
@@ -39,39 +45,48 @@ public class CartFragment extends Fragment {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         }
 
+        // 🌟 绑定控件
+        tvTotalPrice = view.findViewById(R.id.tv_total_price);
+
         SharedPreferences sp = getContext().getSharedPreferences("UserPrefs", 0);
         long userId = sp.getLong("userId", -1);
-        loadCartData(userId);
+
+        loadCartData(userId); // 加载购物车数据
 
         Button btnCheckout = view.findViewById(R.id.btn_checkout);
         btnCheckout.setOnClickListener(v -> {
-            // 🌟 1. 读取手机里保存的最新收货地址
             String currentAddress = getContext().getSharedPreferences("UserPrefs", 0).getString("address", "");
 
-            // 🌟 2. 如果没地址，强制拦截并跳转到地址填写页！
             if (currentAddress == null || currentAddress.trim().isEmpty()) {
                 Toast.makeText(getContext(), "⚠️ 必须填写收货地址才能结算！", Toast.LENGTH_LONG).show();
                 startActivity(new Intent(getContext(), AddressActivity.class));
-                return; // 终止执行
+                return;
             }
 
-            // 🌟 3. 把地址一起发给后端生成订单！
-            RetrofitClient.getApi().createOrder(userId, currentAddress).enqueue(new Callback<Result<String>>() {
-                @Override
-                public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
-                    if (response.body() != null && response.body().code == 200) {
-                        Toast.makeText(getContext(), "下单成功！商家将配送至: " + currentAddress, Toast.LENGTH_LONG).show();
-                        loadCartData(userId);
-                    } else {
-                        Toast.makeText(getContext(), "结算失败", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                @Override
-                public void onFailure(Call<Result<String>> call, Throwable t) {}
-            });
+            if (currentCartList == null || currentCartList.isEmpty()) {
+                Toast.makeText(getContext(), "购物车是空的，先去挑点东西吧！", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // 计算当前总价传给弹窗
+            double totalAmount = calculateTotal(currentCartList);
+            showPaymentDialog(userId, currentAddress, totalAmount);
         });
 
         return view;
+    }
+
+    // 🌟 新增一个专门算钱的方法
+    private double calculateTotal(List<CartVO> list) {
+        double total = 0.0;
+        if (list != null) {
+            for (CartVO item : list) {
+                if (item.getPrice() != null && item.getQuantity() != null) {
+                    total += (item.getPrice() * item.getQuantity());
+                }
+            }
+        }
+        return total;
     }
 
     private void loadCartData(long userId) {
@@ -79,13 +94,56 @@ public class CartFragment extends Fragment {
             @Override
             public void onResponse(Call<Result<List<CartVO>>> call, Response<Result<List<CartVO>>> response) {
                 if (response.body() != null) {
+                    currentCartList = response.body().data;
                     if (recyclerView != null) {
-                        recyclerView.setAdapter(new CartAdapter(response.body().data));
+                        recyclerView.setAdapter(new CartAdapter(currentCartList));
+                    }
+
+                    // 🌟 核心修复：拿到数据后，立刻算钱并更新左下角的“合计: ￥XXX”文字！
+                    double totalAmount = calculateTotal(currentCartList);
+                    if (tvTotalPrice != null) {
+                        tvTotalPrice.setText(String.format("合计: ￥%.2f", totalAmount));
                     }
                 }
             }
             @Override
             public void onFailure(Call<Result<List<CartVO>>> call, Throwable t) {}
         });
+    }
+
+    private void showPaymentDialog(long userId, String address, double totalAmount) {
+        BottomSheetDialog dialog = new BottomSheetDialog(getContext());
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_payment, null);
+
+        TextView tvAmount = dialogView.findViewById(R.id.tv_pay_amount);
+        tvAmount.setText(String.format("￥%.2f", totalAmount));
+
+        Button btnPay = dialogView.findViewById(R.id.btn_confirm_pay);
+        btnPay.setOnClickListener(v -> {
+            btnPay.setText("支付处理中...");
+            btnPay.setEnabled(false);
+
+            RetrofitClient.getApi().createOrder(userId, address).enqueue(new Callback<Result<String>>() {
+                @Override
+                public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
+                    dialog.dismiss();
+                    if (response.body() != null && response.body().code == 200) {
+                        Toast.makeText(getContext(), "🎉 支付成功！商家将配送至: " + address, Toast.LENGTH_LONG).show();
+                        loadCartData(userId);
+                    } else {
+                        Toast.makeText(getContext(), "结算失败，请稍后重试", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Result<String>> call, Throwable t) {
+                    dialog.dismiss();
+                    Toast.makeText(getContext(), "网络异常", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+
+        dialog.setContentView(dialogView);
+        dialog.show();
     }
 }
