@@ -1,6 +1,7 @@
 package com.example.agri_app.adapter;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.agri_app.PublishActivity;
 import com.example.agri_app.R;
 import com.example.agri_app.entity.Product;
 import com.example.agri_app.entity.Result;
@@ -66,16 +68,29 @@ public class MyProductAdapter extends RecyclerView.Adapter<MyProductAdapter.View
             holder.tvStatusBadge.setBackgroundColor(Color.parseColor("#F44336")); // 红色
         }
 
-// 4. 🌟 处理删除按钮的点击事件
-        holder.itemView.findViewById(R.id.btn_delete).setOnClickListener(v -> {
-
-            // 🌟 核心修复点 1：在点击瞬间，获取这个卡片此时此刻的真实位置！
+        // 4. 🌟 新增：点击商品卡片本身，跳转到发布页进行“修改”
+        holder.itemView.setOnClickListener(v -> {
             int currentPosition = holder.getAdapterPosition();
-
-            // 🌟 核心修复点 2：防止用户疯狂连击导致下标越界崩溃
             if (currentPosition == RecyclerView.NO_POSITION) return;
+            Product currentProduct = productList.get(currentPosition);
 
-            // 重新获取正确的商品对象
+            Intent intent = new Intent(v.getContext(), PublishActivity.class);
+            // 把旧数据统统塞进 Intent 里带过去
+            intent.putExtra("EDIT_ID", currentProduct.getId());
+            intent.putExtra("EDIT_NAME", currentProduct.getName());
+            intent.putExtra("EDIT_PRICE", String.valueOf(currentProduct.getPrice()));
+            intent.putExtra("EDIT_STOCK", String.valueOf(currentProduct.getStock()));
+            intent.putExtra("EDIT_DESC", currentProduct.getDescription());
+            intent.putExtra("EDIT_CATEGORY", currentProduct.getCategory());
+            intent.putExtra("EDIT_UNIT", currentProduct.getUnit());
+            intent.putExtra("EDIT_IMAGE", currentProduct.getImageUrl());
+            v.getContext().startActivity(intent);
+        });
+
+        // 5. 处理删除按钮的点击事件
+        holder.itemView.findViewById(R.id.btn_delete).setOnClickListener(v -> {
+            int currentPosition = holder.getAdapterPosition();
+            if (currentPosition == RecyclerView.NO_POSITION) return;
             Product currentProduct = productList.get(currentPosition);
 
             // 弹出确认对话框
@@ -89,8 +104,7 @@ public class MyProductAdapter extends RecyclerView.Adapter<MyProductAdapter.View
                             public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
                                 if (response.body() != null && response.body().code == 200) {
                                     Toast.makeText(v.getContext(), "删除成功", Toast.LENGTH_SHORT).show();
-
-                                    // 🌟 核心修复点 3：使用最新的 currentPosition 去删除和刷新
+                                    // 动态刷新列表
                                     productList.remove(currentPosition);
                                     notifyItemRemoved(currentPosition);
                                     notifyItemRangeChanged(currentPosition, productList.size());

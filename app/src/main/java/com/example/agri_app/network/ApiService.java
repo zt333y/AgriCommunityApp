@@ -99,4 +99,8 @@ public interface ApiService {
     // 🌟 新增：更新用户收货地址
     @POST("/user/updateAddress")
     Call<Result<String>> updateAddress(@Query("userId") Long userId, @Query("address") String address);
+
+    // 🌟 新增：修改商品的请求
+    @POST("/api/product/update")
+    Call<Result<String>> updateProduct(@Body Product product);
 }

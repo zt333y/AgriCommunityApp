@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F7FA"
-    android:orientation="vertical">
+    android:background="#F5F7FA">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_my_products"
@@ -12,4 +12,16 @@
         android:padding="5dp"
         android:clipToPadding="false"/>
 
-</LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_publish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="20dp"
+        app:backgroundTint="#4CAF50"
+        app:tint="#FFFFFF"
+        android:src="@android:drawable/ic_input_add"
+        android:contentDescription="发布新商品"/>
+
+</RelativeLayout>

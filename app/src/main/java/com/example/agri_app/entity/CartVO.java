@@ -6,6 +6,7 @@ public class CartVO {
     private String productName; // 商品名称
     private Double price;     // 单价
     private Integer quantity; // 数量
+    private String imageUrl;
 
     // ============ 下面是所有的 Getters 和 Setters ============
 
@@ -49,5 +50,12 @@ public class CartVO {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

@@ -11,6 +11,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tv_publish_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="🌽 发布农产品"
@@ -20,14 +21,21 @@
             android:layout_marginBottom="20dp"/>
 
         <EditText android:id="@+id/et_pub_name" android:layout_width="match_parent" android:layout_height="50dp" android:hint="商品名称 (如: 散养土鸡蛋)" android:background="#FFFFFF" android:padding="10dp" android:layout_marginBottom="10dp"/>
-        <EditText android:id="@+id/et_pub_category" android:layout_width="match_parent" android:layout_height="50dp" android:hint="分类 (如: 肉禽蛋 / 水果)" android:background="#FFFFFF" android:padding="10dp" android:layout_marginBottom="10dp"/>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="50dp" android:background="#FFFFFF" android:layout_marginBottom="10dp" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical" android:orientation="horizontal">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="商品分类：" android:textColor="#666666" android:textSize="16sp"/>
+            <Spinner android:id="@+id/spinner_category" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@null" />
+        </LinearLayout>
 
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="10dp">
             <EditText android:id="@+id/et_pub_price" android:layout_width="0dp" android:layout_weight="1" android:layout_height="50dp" android:hint="单价 (元)" android:inputType="numberDecimal" android:background="#FFFFFF" android:padding="10dp" android:layout_marginRight="5dp"/>
             <EditText android:id="@+id/et_pub_stock" android:layout_width="0dp" android:layout_weight="1" android:layout_height="50dp" android:hint="库存数量" android:inputType="number" android:background="#FFFFFF" android:padding="10dp" android:layout_marginLeft="5dp"/>
         </LinearLayout>
 
-        <EditText android:id="@+id/et_pub_unit" android:layout_width="match_parent" android:layout_height="50dp" android:hint="计量单位 (如: 斤 / 箱 / 枚)" android:background="#FFFFFF" android:padding="10dp" android:layout_marginBottom="10dp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="50dp" android:background="#FFFFFF" android:layout_marginBottom="10dp" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical" android:orientation="horizontal">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="计量单位：" android:textColor="#666666" android:textSize="16sp"/>
+            <Spinner android:id="@+id/spinner_unit" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@null" />
+        </LinearLayout>
 
         <FrameLayout
             android:id="@+id/layout_image_picker"
