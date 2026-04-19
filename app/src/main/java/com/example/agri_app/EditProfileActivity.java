@@ -42,26 +42,27 @@ public class EditProfileActivity extends AppCompatActivity {
         // 1. 获取本地缓存的用户数据回显
         SharedPreferences sp = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         userId = sp.getLong("userId", -1L);
-        etNickname.setText(sp.getString("nickname", "当前昵称"));
+        // 回显昵称（如果没有设置过，默认显示当前用户名）
+        etNickname.setText(sp.getString("nickname", sp.getString("username", "当前昵称")));
 
-        // 尝试加载本地头像
+        // 2. 🌟 核心修复：尝试加载本地头像（修复了之前的报错变量名）
         selectedAvatarUri = sp.getString("avatarUri", "");
-        if (!selectedRegion.isEmpty()) {
+        if (!selectedAvatarUri.isEmpty()) {
             ivAvatar.setImageURI(Uri.parse(selectedAvatarUri));
         }
 
-        // 2. 🌟 点击头像：调用系统原生相册（极其稳定，不会崩溃）
+        // 3. 点击头像：调用系统原生相册
         ivAvatar.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType("image/*");
             startActivityForResult(intent, PICK_IMAGE_REQUEST);
         });
 
-        // 3. 点击保存
+        // 4. 点击保存
         btnSave.setOnClickListener(v -> saveProfile());
     }
 
-    // 🌟 接收相册选择的图片
+    // 接收相册选择的图片
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -81,20 +82,20 @@ public class EditProfileActivity extends AppCompatActivity {
             return;
         }
 
-        // 封装请求数据
+        // 封装请求数据 (使用 realName 承载昵称)
         User user = new User();
         user.setId(userId);
-        user.setNickname(newNickname);
+        user.setRealName(newNickname);
         if (!newPassword.isEmpty()) {
             user.setPassword(newPassword);
         }
 
-        // 发送网络请求给后端更新密码和昵称
+        // 发送网络请求给后端
         RetrofitClient.getApi().updateProfile(user).enqueue(new Callback<Result<String>>() {
             @Override
             public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
                 if (response.body() != null && response.body().code == 200) {
-                    // 🌟 核心：保存成功后，同步更新本地的 SP 缓存，让整个 App 瞬间感知变化
+                    // 保存成功后，同步更新本地的 SP 缓存
                     SharedPreferences.Editor editor = getSharedPreferences("UserPrefs", MODE_PRIVATE).edit();
                     editor.putString("nickname", newNickname);
                     editor.putString("avatarUri", selectedAvatarUri); // 把头像路径存本地
@@ -102,15 +103,15 @@ public class EditProfileActivity extends AppCompatActivity {
                     editor.apply();
 
                     Toast.makeText(EditProfileActivity.this, "资料修改成功！", Toast.LENGTH_SHORT).show();
-                    finish();
+                    finish(); // 返回个人中心
                 } else {
-                    Toast.makeText(EditProfileActivity.this, "修改失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditProfileActivity.this, "修改失败，后端报错", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Result<String>> call, Throwable t) {
-                Toast.makeText(EditProfileActivity.this, "网络异常，请稍后再试", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditProfileActivity.this, "网络异常", Toast.LENGTH_SHORT).show();
             }
         });
     }
