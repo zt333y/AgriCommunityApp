@@ -1,80 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F7FA"
-    android:orientation="vertical"
-    android:paddingTop="15dp">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="#FFF8E1"
-        android:padding="10dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
+        android:layout_height="50dp"
+        android:layout_margin="15dp"
+        android:background="@drawable/shape_search_bar"
+        android:elevation="2dp"
         android:gravity="center_vertical"
-        android:elevation="2dp">
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="5dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="📢"
-            android:textSize="18sp"
-            android:layout_marginRight="8dp"/>
+            android:text="🔍"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="搜索新鲜蔬菜、水果、肉禽..."
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:singleLine="true"
+            android:textColor="#333333"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btn_search"
+            android:layout_width="65dp"
+            android:layout_height="35dp"
+            android:backgroundTint="#FF9800"
+            android:padding="0dp"
+            android:text="搜索"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            app:cornerRadius="18dp"/>
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="#FFF8E1"> <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📢 社区头条："
+            android:textColor="#FF9800"
+            android:textStyle="bold"
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/tv_marquee_notice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="暂无系统公告..."
-            android:textColor="#FF9800"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:singleLine="true"
+            android:layout_marginLeft="5dp"
             android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
             android:focusable="true"
-            android:focusableInTouchMode="true"/>
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="公告加载中..."
+            android:textColor="#666666"
+            android:textSize="13sp" />
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp">
-
-        <EditText
-            android:id="@+id/et_search"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:background="#FFFFFF"
-            android:hint="🔍 搜索新鲜农产品..."
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:textSize="14sp" />
-
-        <Button
-            android:id="@+id/btn_search"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginLeft="10dp"
-            android:backgroundTint="#4CAF50"
-            android:text="搜索"
-            android:textColor="#FFFFFF" />
-    </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:clipToPadding="false"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="80dp" />
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="20dp" />
+
 </LinearLayout>

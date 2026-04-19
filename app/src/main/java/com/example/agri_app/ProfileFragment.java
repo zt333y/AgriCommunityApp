@@ -3,8 +3,9 @@ package com.example.agri_app;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import java.io.File;
 
 public class ProfileFragment extends Fragment {
 
@@ -38,7 +41,6 @@ public class ProfileFragment extends Fragment {
         TextView btnMyAddress = root.findViewById(R.id.btn_my_address);
         Button btnLogout = root.findViewById(R.id.btn_logout);
 
-        // 🌟 点击那排按钮中的“修改个人资料”进行跳转
         btnEditProfile.setOnClickListener(v -> startActivity(new Intent(getContext(), EditProfileActivity.class)));
 
         TextView btnApplyRole = root.findViewById(R.id.btn_apply_role);
@@ -104,23 +106,28 @@ public class ProfileFragment extends Fragment {
         if (getContext() != null) {
             SharedPreferences sp = getContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
 
-            // 刷新ID
-            long userId = sp.getLong("userId", 0);
+            long userId = sp.getLong("userId", 0); // 先获取到当前登录的 ID
             tvUserId.setText("社区ID: " + userId);
 
-            // 刷新昵称
             String nickname = sp.getString("nickname", sp.getString("username", "未登录"));
             tvUsername.setText(nickname);
 
-            // 🌟 核心修复：加上 try-catch 防止相册权限过期导致 App 闪退
-            String avatarUri = sp.getString("avatarUri", "");
-            if (!avatarUri.isEmpty()) {
+            // 🌟 核心修复：根据当前登录的 userId 去找对应的专属头像文件！
+            File avatarFile = new File(getContext().getFilesDir(), "avatar_" + userId + ".jpg");
+
+            if (avatarFile.exists()) {
+                // 如果当前用户传过头像，就显示他的专属头像
                 try {
-                    ivAvatar.setImageURI(Uri.parse(avatarUri));
+                    Bitmap bitmap = BitmapFactory.decodeFile(avatarFile.getAbsolutePath());
+                    if (bitmap != null) {
+                        ivAvatar.setImageBitmap(bitmap);
+                    }
                 } catch (Exception e) {
-                    // 如果系统收回了图片权限，就不显示它，保证 App 绝对不会崩溃
                     e.printStackTrace();
                 }
+            } else {
+                // 🌟 如果这个新账号还没传过头像，就显示系统默认的灰色头像（防止上一个账号的残影）
+                ivAvatar.setImageResource(R.mipmap.ic_launcher_round);
             }
         }
     }

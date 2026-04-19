@@ -22,9 +22,6 @@ public interface ApiService {
     @POST("/user/login")
     Call<Result<LoginResponse>> login(@Body User user);
 
-    @GET("/api/product/list")
-    Call<Result<java.util.List<Product>>> getProductList(@Query("keyword") String keyword);
-
     // 加入购物车接口
     @POST("/api/cart/add")
     Call<Result<String>> addCart(@Body com.example.agri_app.entity.Cart cart);
@@ -109,11 +106,15 @@ public interface ApiService {
     @GET("/api/order/items")
     Call<Result<java.util.List<com.example.agri_app.entity.OrderItem>>> getOrderItems(@Query("orderId") Long orderId);
 
-    // 🌟 新增：获取系统公告列表，用于首页跑马灯
-    @GET("/api/notice/list")
-    Call<com.example.agri_app.entity.Result<java.util.List<com.example.agri_app.entity.Notice>>> getNoticeList();
-
     // 🌟 修改个人资料（传对象过去，包含 id, nickname, password 等字段）
     @POST("/user/update")
     Call<com.example.agri_app.entity.Result<String>> updateProfile(@Body com.example.agri_app.entity.User user);
+
+    // 1. 获取商品列表（支持模糊搜索）
+    @GET("/product/list")
+    Call<Result<List<Product>>> getProductList(@Query("keyword") String keyword);
+
+    // 2. 获取首页滚动公告列表
+    @GET("/notice/list")
+    Call<Result<List<Notice>>> getNoticeList();
 }

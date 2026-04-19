@@ -2,6 +2,8 @@ package com.example.agri_app;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
@@ -16,6 +18,11 @@ import com.example.agri_app.entity.Result;
 import com.example.agri_app.entity.User;
 import com.example.agri_app.network.RetrofitClient;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,7 +32,6 @@ public class EditProfileActivity extends AppCompatActivity {
     private ImageView ivAvatar;
     private EditText etNickname, etPassword;
     private Long userId;
-    private String selectedAvatarUri = "";
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
@@ -41,42 +47,36 @@ public class EditProfileActivity extends AppCompatActivity {
 
         SharedPreferences sp = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         userId = sp.getLong("userId", -1L);
-        // 回显昵称
         etNickname.setText(sp.getString("nickname", sp.getString("username", "当前昵称")));
 
-        // 尝试加载本地头像
-        selectedAvatarUri = sp.getString("avatarUri", "");
-        if (!selectedAvatarUri.isEmpty()) {
-            try {
-                ivAvatar.setImageURI(Uri.parse(selectedAvatarUri));
-            } catch (Exception e) {
-                e.printStackTrace();
+        File avatarFile = new File(getFilesDir(), "avatar_" + userId + ".jpg");
+        if (avatarFile.exists()) {
+            Bitmap bitmap = BitmapFactory.decodeFile(avatarFile.getAbsolutePath());
+            if (bitmap != null) {
+                ivAvatar.setImageBitmap(bitmap);
             }
         }
 
-        // 点击头像
         ivAvatar.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType("image/*");
             startActivityForResult(intent, PICK_IMAGE_REQUEST);
         });
 
-        // 点击保存
         btnSave.setOnClickListener(v -> saveProfile());
     }
 
-    // 🌟 接管相册图片：直接复制一份到我们自己 App 的沙盒目录，彻底解决小米权限闪退问题！
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri imageUri = data.getData();
             try {
-                java.io.InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                InputStream inputStream = getContentResolver().openInputStream(imageUri);
                 if (inputStream == null) return;
 
-                java.io.File avatarFile = new java.io.File(getFilesDir(), "my_avatar.jpg");
-                java.io.OutputStream outputStream = new java.io.FileOutputStream(avatarFile);
+                File avatarFile = new File(getFilesDir(), "avatar_" + userId + ".jpg");
+                OutputStream outputStream = new FileOutputStream(avatarFile);
 
                 byte[] buffer = new byte[1024];
                 int length;
@@ -86,9 +86,11 @@ public class EditProfileActivity extends AppCompatActivity {
                 outputStream.close();
                 inputStream.close();
 
-                // 将新生成的、完全受控制的文件路径存起来
-                selectedAvatarUri = Uri.fromFile(avatarFile).toString();
-                ivAvatar.setImageURI(Uri.parse(selectedAvatarUri));
+                // 🌟 核心修复：复制完成后，立即用 BitmapFactory 解码并设置，绝不使用 setImageURI
+                Bitmap bitmap = BitmapFactory.decodeFile(avatarFile.getAbsolutePath());
+                if (bitmap != null) {
+                    ivAvatar.setImageBitmap(bitmap);
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -106,7 +108,6 @@ public class EditProfileActivity extends AppCompatActivity {
             return;
         }
 
-        // 🌟 核心：统一使用 setUsername！绝不使用 setRealName
         User user = new User();
         user.setId(userId);
         user.setUsername(newNickname);
@@ -118,18 +119,16 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
                 if (response.body() != null && response.body().code == 200) {
-                    // 同步更新本地缓存
                     SharedPreferences.Editor editor = getSharedPreferences("UserPrefs", MODE_PRIVATE).edit();
                     editor.putString("nickname", newNickname);
-                    editor.putString("username", newNickname); // 顺便把旧的 username 缓存也改掉
-                    editor.putString("avatarUri", selectedAvatarUri);
+                    editor.putString("username", newNickname);
                     if (!newPassword.isEmpty()) editor.putString("password", newPassword);
                     editor.apply();
 
                     Toast.makeText(EditProfileActivity.this, "资料修改成功！", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
-                    Toast.makeText(EditProfileActivity.this, "修改失败，后端报错", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditProfileActivity.this, "修改失败", Toast.LENGTH_SHORT).show();
                 }
             }
 
