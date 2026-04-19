@@ -104,16 +104,23 @@ public class ProfileFragment extends Fragment {
         if (getContext() != null) {
             SharedPreferences sp = getContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
 
-            // 🌟 修复：这里的显示彻底去掉了 NO.
+            // 刷新ID
             long userId = sp.getLong("userId", 0);
             tvUserId.setText("社区ID: " + userId);
 
+            // 刷新昵称
             String nickname = sp.getString("nickname", sp.getString("username", "未登录"));
             tvUsername.setText(nickname);
 
+            // 🌟 核心修复：加上 try-catch 防止相册权限过期导致 App 闪退
             String avatarUri = sp.getString("avatarUri", "");
             if (!avatarUri.isEmpty()) {
-                ivAvatar.setImageURI(Uri.parse(avatarUri));
+                try {
+                    ivAvatar.setImageURI(Uri.parse(avatarUri));
+                } catch (Exception e) {
+                    // 如果系统收回了图片权限，就不显示它，保证 App 绝对不会崩溃
+                    e.printStackTrace();
+                }
             }
         }
     }

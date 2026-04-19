@@ -114,6 +114,6 @@ public interface ApiService {
     Call<com.example.agri_app.entity.Result<java.util.List<com.example.agri_app.entity.Notice>>> getNoticeList();
 
     // 🌟 修改个人资料（传对象过去，包含 id, nickname, password 等字段）
-    @POST("/api/user/update")
+    @POST("/user/update")
     Call<com.example.agri_app.entity.Result<String>> updateProfile(@Body com.example.agri_app.entity.User user);
 }
