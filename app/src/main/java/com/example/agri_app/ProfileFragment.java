@@ -28,6 +28,10 @@ public class ProfileFragment extends Fragment {
         TextView btnMyAddress = view.findViewById(R.id.btn_my_address);
         Button btnLogout = view.findViewById(R.id.btn_logout);
 
+        // 🌟 绑定资质申请相关控件
+        TextView btnApplyRole = view.findViewById(R.id.btn_apply_role);
+        View lineApply = view.findViewById(R.id.line_apply);
+
         // 2. 绑定带有特殊角色权限的控件及其分割线
         TextView btnManagement = view.findViewById(R.id.btn_my_products); // 管理功能入口
         View lineFarmer = view.findViewById(R.id.line_farmer);           // 管理入口上方的分割线
@@ -44,9 +48,11 @@ public class ProfileFragment extends Fragment {
         btnPicking.setVisibility(View.GONE);
         btnManagement.setVisibility(View.GONE);
 
-        // 🌟 核心修复：确保默认状态下，这些动态分割线也是隐藏的，防止UI乱掉
+        // 🌟 确保默认状态下，这些动态分割线和申请入口是隐藏的，防止UI乱掉
         if (lineFarmer != null) lineFarmer.setVisibility(View.GONE);
         if (linePicking != null) linePicking.setVisibility(View.GONE);
+        if (btnApplyRole != null) btnApplyRole.setVisibility(View.GONE);
+        if (lineApply != null) lineApply.setVisibility(View.GONE);
 
         if (role == 1) { // 🌾 【如果是农户】
             tvRoleBadge.setText("🌾 入驻农户");
@@ -79,6 +85,15 @@ public class ProfileFragment extends Fragment {
         } else { // 🏠 【普通居民】
             tvRoleBadge.setText("🏠 社区居民");
             tvRoleBadge.setBackgroundColor(Color.parseColor("#4CAF50"));
+
+            // 🌟 核心修复：只有普通居民，才显示“资质入驻申请”入口并绑定点击跳转
+            if (btnApplyRole != null) {
+                btnApplyRole.setVisibility(View.VISIBLE);
+                btnApplyRole.setOnClickListener(v -> startActivity(new Intent(getContext(), ApplyActivity.class)));
+            }
+            if (lineApply != null) {
+                lineApply.setVisibility(View.VISIBLE);
+            }
         }
 
         // ================== 通用按钮跳转 ==================
