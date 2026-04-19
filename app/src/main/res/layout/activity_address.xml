@@ -9,19 +9,46 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:text="设置默认收货地址"
         android:textColor="#333333"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="20dp"/>
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:layout_marginBottom="10dp">
+
+        <Spinner
+            android:id="@+id/spinner_province"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1" />
+
+        <Spinner
+            android:id="@+id/spinner_city"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1" />
+
+        <Spinner
+            android:id="@+id/spinner_district"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1" />
+    </LinearLayout>
 
     <EditText
-        android:id="@+id/et_address"
+        android:id="@+id/et_address_detail"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:background="#FFFFFF"
         android:gravity="top|left"
-        android:hint="请输入详细的收货地址（例如：XX社区X号楼X单元XXX）"
+        android:hint="请输入详细门牌号（例如：阳光社区3号楼4单元201）"
         android:padding="15dp"
         android:textSize="16sp" />
 
@@ -29,7 +56,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="* 提示：目前仅支持设置一个默认提货/收货地址"
+        android:text="* 最终地址将自动拼接为您选择的地区+详细地址"
         android:textColor="#999999"
         android:textSize="12sp" />
 

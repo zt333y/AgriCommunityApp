@@ -36,6 +36,6 @@
         <activity android:name=".ApplyActivity" android:exported="false" />
         <activity android:name=".PickingListActivity" android:exported="false" />
         <activity android:name=".AddressActivity" android:exported="false" />
-
+        <activity android:name=".EditProfileActivity" android:exported="false" />
     </application>
 </manifest>

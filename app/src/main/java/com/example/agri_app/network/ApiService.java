@@ -85,9 +85,6 @@ public interface ApiService {
     @POST("/api/apply/submit")
     Call<Result<String>> submitApply(@Body Apply apply);
 
-    @GET("api/notice/list")
-    Call<Result<List<Notice>>> getNoticeList();
-
     // 🌟 新增：农户获取今日采摘/发货汇总清单
     @GET("/api/order/pickingList")
     Call<Result<java.util.List<com.example.agri_app.entity.FarmerPickingVO>>> getPickingList();
@@ -103,4 +100,20 @@ public interface ApiService {
     // 🌟 新增：修改商品的请求
     @POST("/api/product/update")
     Call<Result<String>> updateProduct(@Body Product product);
+
+    // 🌟 新增：获取商品评价列表
+    @GET("/api/review/product")
+    Call<Result<java.util.List<com.example.agri_app.entity.ReviewVO>>> getProductReviews(@Query("productId") Long productId);
+
+    // 🌟 新增：获取订单中的所有商品，用于分别评价
+    @GET("/api/order/items")
+    Call<Result<java.util.List<com.example.agri_app.entity.OrderItem>>> getOrderItems(@Query("orderId") Long orderId);
+
+    // 🌟 新增：获取系统公告列表，用于首页跑马灯
+    @GET("/api/notice/list")
+    Call<com.example.agri_app.entity.Result<java.util.List<com.example.agri_app.entity.Notice>>> getNoticeList();
+
+    // 🌟 修改个人资料（传对象过去，包含 id, nickname, password 等字段）
+    @POST("/api/user/update")
+    Call<com.example.agri_app.entity.Result<String>> updateProfile(@Body com.example.agri_app.entity.User user);
 }

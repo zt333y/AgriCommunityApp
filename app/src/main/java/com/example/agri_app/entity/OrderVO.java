@@ -7,6 +7,9 @@ public class OrderVO {
     private Integer status;     // 订单状态 (0:待发货, 1:已发货, 2:已完成)
     private String createTime;  // 下单时间
 
+    // 🌟 核心新增：专门为了“去评价”功能准备的商品ID
+    private Long productId;
+
     // ============ Getters and Setters ============
 
     public Long getId() { return id; }
@@ -23,4 +26,8 @@ public class OrderVO {
 
     public String getCreateTime() { return createTime; }
     public void setCreateTime(String createTime) { this.createTime = createTime; }
+
+    // 🌟 新增的 Getter / Setter
+    public Long getProductId() { return productId; }
+    public void setProductId(Long productId) { this.productId = productId; }
 }
