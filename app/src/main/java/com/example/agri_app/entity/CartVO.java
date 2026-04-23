@@ -1,14 +1,20 @@
 package com.example.agri_app.entity;
 
+import com.google.gson.annotations.SerializedName; // 🌟 新增导入这个神奇的包
+
 public class CartVO {
+
+    // 🌟 核心修复：强行把后端的 "cartId" 映射到前端的 "id" 上！
+    @SerializedName("cartId")
     private Long id;          // 购物车记录的主键
+
     private Long productId;   // 商品ID
     private String productName; // 商品名称
     private Double price;     // 单价
     private Integer quantity; // 数量
     private String imageUrl;
 
-    // ============ 下面是所有的 Getters 和 Setters ============
+    // ============ 下面是原封不动的 Getters 和 Setters ============
 
     public Long getId() {
         return id;
@@ -34,7 +40,6 @@ public class CartVO {
         this.productName = productName;
     }
 
-    // 👉 这里就是你刚才报错缺少的 getPrice 方法！
     public Double getPrice() {
         return price;
     }
@@ -43,7 +48,6 @@ public class CartVO {
         this.price = price;
     }
 
-    // 👉 这里是获取数量的方法！
     public Integer getQuantity() {
         return quantity;
     }
@@ -51,6 +55,7 @@ public class CartVO {
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
+
     public String getImageUrl() {
         return imageUrl;
     }

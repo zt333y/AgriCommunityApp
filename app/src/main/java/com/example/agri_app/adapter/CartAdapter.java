@@ -65,7 +65,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         // 点击整个商品卡片，跳转到商品详情页
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
-            intent.putExtra("productId", c.getProductId()); // 将商品ID传过去
+            intent.putExtra("id", c.getProductId()); // 👈 这里必须改
             v.getContext().startActivity(intent);
         });
 
