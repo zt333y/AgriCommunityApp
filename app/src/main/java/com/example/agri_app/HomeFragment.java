@@ -80,17 +80,22 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    // 原有的加载商品列表方法
     private void loadProducts(String keyword) {
         RetrofitClient.getApi().getProductList(keyword).enqueue(new Callback<Result<List<Product>>>() {
             @Override
             public void onResponse(Call<Result<List<Product>>> call, Response<Result<List<Product>>> response) {
                 if (response.body() != null && response.body().code == 200) {
                     recyclerView.setAdapter(new ProductAdapter(response.body().data));
+                } else {
+                    // 🌟 如果后端返回失败，弹出提示
+                    Toast.makeText(getContext(), "获取商品失败，请检查接口！", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
-            public void onFailure(Call<Result<List<Product>>> call, Throwable t) {}
+            public void onFailure(Call<Result<List<Product>>> call, Throwable t) {
+                // 🌟 如果网络不通，把真实错误原因弹出来
+                Toast.makeText(getContext(), "网络异常：" + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
         });
     }
 }

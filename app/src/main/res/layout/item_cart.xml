@@ -32,14 +32,25 @@
 
             <TextView
                 android:id="@+id/cart_item_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"
                 android:text="商品名称"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:textColor="#333333"
                 android:textStyle="bold"
                 android:maxLines="2"
-                android:ellipsize="end"/>
+                android:ellipsize="end" />
+
+            <ImageView
+                android:id="@+id/btn_delete_cart"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:src="@android:drawable/ic_menu_delete"
+                android:tint="#999999"
+                android:padding="2dp"/>
 
             <TextView
                 android:id="@+id/cart_item_price"
@@ -51,16 +62,45 @@
                 android:textStyle="bold"
                 android:layout_alignParentBottom="true"/>
 
-            <TextView
-                android:id="@+id/cart_item_quantity"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="x 1"
-                android:textSize="14sp"
-                android:textColor="#999999"
+                android:orientation="horizontal"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginBottom="2dp"/>
+                android:gravity="center_vertical"
+                android:background="@drawable/shape_search_bar">
+
+                <TextView
+                    android:id="@+id/btn_minus"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:text="-"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="#666666"
+                    android:background="?android:attr/selectableItemBackground"/>
+
+                <TextView
+                    android:id="@+id/cart_item_quantity"
+                    android:layout_width="35dp"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:textColor="#333333"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/btn_plus"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:text="+"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="#FF9800"
+                    android:background="?android:attr/selectableItemBackground"/>
+            </LinearLayout>
 
         </RelativeLayout>
     </LinearLayout>

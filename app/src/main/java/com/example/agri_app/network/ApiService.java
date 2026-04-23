@@ -111,10 +111,17 @@ public interface ApiService {
     Call<com.example.agri_app.entity.Result<String>> updateProfile(@Body com.example.agri_app.entity.User user);
 
     // 1. 获取商品列表（支持模糊搜索）
-    @GET("/product/list")
+    @GET("/api/product/list")
     Call<Result<List<Product>>> getProductList(@Query("keyword") String keyword);
 
     // 2. 获取首页滚动公告列表
-    @GET("/notice/list")
+    @GET("/api/notice/list")
     Call<Result<List<Notice>>> getNoticeList();
+
+    // 🌟 在里面加上修改数量和删除的接口
+    @POST("/api/cart/updateQuantity")
+    Call<Result<String>> updateCartQuantity(@Query("cartId") Long cartId, @Query("quantity") Integer quantity);
+
+    @POST("/api/cart/delete")
+    Call<Result<String>> deleteCartItem(@Query("cartId") Long cartId);
 }

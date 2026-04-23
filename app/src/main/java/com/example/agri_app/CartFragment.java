@@ -32,7 +32,7 @@ public class CartFragment extends Fragment {
     private RecyclerView recyclerView;
     private List<CartVO> currentCartList;
 
-    // 🌟 新增：绑定合计金额的 TextView
+    // 绑定合计金额的 TextView
     private TextView tvTotalPrice;
 
     @Nullable
@@ -45,7 +45,7 @@ public class CartFragment extends Fragment {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         }
 
-        // 🌟 绑定控件
+        // 绑定控件
         tvTotalPrice = view.findViewById(R.id.tv_total_price);
 
         SharedPreferences sp = getContext().getSharedPreferences("UserPrefs", 0);
@@ -76,7 +76,7 @@ public class CartFragment extends Fragment {
         return view;
     }
 
-    // 🌟 新增一个专门算钱的方法
+    // 专门算钱的方法
     private double calculateTotal(List<CartVO> list) {
         double total = 0.0;
         if (list != null) {
@@ -95,11 +95,19 @@ public class CartFragment extends Fragment {
             public void onResponse(Call<Result<List<CartVO>>> call, Response<Result<List<CartVO>>> response) {
                 if (response.body() != null) {
                     currentCartList = response.body().data;
+
                     if (recyclerView != null) {
-                        recyclerView.setAdapter(new CartAdapter(currentCartList));
+                        // 🌟 核心修改：这里传入了 CartAdapter 要求的 OnCartChangeListener 监听器！
+                        // 只要在适配器里点击了 加号、减号、垃圾桶，就会触发下面括号里的重新算钱逻辑！
+                        recyclerView.setAdapter(new CartAdapter(currentCartList, () -> {
+                            double newTotal = calculateTotal(currentCartList);
+                            if (tvTotalPrice != null) {
+                                tvTotalPrice.setText(String.format("合计: ￥%.2f", newTotal));
+                            }
+                        }));
                     }
 
-                    // 🌟 核心修复：拿到数据后，立刻算钱并更新左下角的“合计: ￥XXX”文字！
+                    // 拿到数据后，立刻算钱并更新左下角的“合计: ￥XXX”文字（初次渲染）
                     double totalAmount = calculateTotal(currentCartList);
                     if (tvTotalPrice != null) {
                         tvTotalPrice.setText(String.format("合计: ￥%.2f", totalAmount));
@@ -129,7 +137,7 @@ public class CartFragment extends Fragment {
                     dialog.dismiss();
                     if (response.body() != null && response.body().code == 200) {
                         Toast.makeText(getContext(), "🎉 支付成功！商家将配送至: " + address, Toast.LENGTH_LONG).show();
-                        loadCartData(userId);
+                        loadCartData(userId); // 支付成功后重新加载（清空）购物车
                     } else {
                         Toast.makeText(getContext(), "结算失败，请稍后重试", Toast.LENGTH_SHORT).show();
                     }
