@@ -62,10 +62,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             holder.ivImage.setImageResource(R.mipmap.ic_launcher);
         }
 
-        // 点击整个商品卡片，跳转到商品详情页
+// 🌟 核心修复：完全模仿首页的传参方式！大写字母必须对齐！
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
-            intent.putExtra("id", c.getProductId()); // 👈 这里必须改
+
+            intent.putExtra("ID", c.getProductId());      // 传商品ID给详情页加载评价
+            intent.putExtra("NAME", c.getProductName());  // 传商品名字
+            intent.putExtra("PRICE", c.getPrice());       // 传商品价格
+            intent.putExtra("IMAGE_URL", c.getImageUrl());// 传商品图片
+            intent.putExtra("DESC", "优质农产品");         // 购物车接口里没有长描述，给个占位符兜底
+
             v.getContext().startActivity(intent);
         });
 
