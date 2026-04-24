@@ -4,5 +4,13 @@ public class OrderItem {
     public Long id;
     public Long orderId;
     public Long productId;
-    public String productName; // 商品名称，用于在界面上提示用户
+    public String productName;
+    public Integer quantity; // 🌟 必须要有购买数量
+
+    // 🌟 提供给 Adapter 调用的方法，解决报错
+    public String getProductName() { return productName; }
+    public void setProductName(String productName) { this.productName = productName; }
+
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
 }

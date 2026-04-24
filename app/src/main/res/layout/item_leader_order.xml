@@ -28,11 +28,39 @@
             android:textSize="14sp"
             android:textStyle="bold"/>
 
+        <LinearLayout
+            android:id="@+id/layout_items_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_leader_order_no"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:background="#F9F9F9">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📋 待核销商品明细："
+                android:textSize="13sp"
+                android:textColor="#666666"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_order_details_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="加载中..."
+                android:textSize="14sp"
+                android:textColor="#333333"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
         <Button
             android:id="@+id/btn_leader_action"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_below="@id/tv_leader_order_no"
+            android:layout_below="@id/layout_items_container"
             android:layout_alignParentRight="true"
             android:layout_marginTop="15dp"
             android:text="操作按钮"
