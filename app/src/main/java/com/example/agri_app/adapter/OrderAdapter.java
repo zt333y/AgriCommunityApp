@@ -51,29 +51,30 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         holder.tvTime.setText("下单时间: " + o.getCreateTime());
         holder.tvAmount.setText("实付: ￥" + o.getTotalAmount());
 
-        // 🌟 核心：动态渲染购买的商品明细列表
-        holder.layoutOrderItems.removeAllViews();
+// 🌟 这一段是渲染商品明细的核心！一定要加在 onBindViewHolder 里面！
+        holder.layoutOrderItems.removeAllViews(); // 先清空，防止列表滑动时数据错乱
         if (o.getItems() != null && !o.getItems().isEmpty()) {
             holder.layoutOrderItems.setVisibility(View.VISIBLE);
             for (OrderItem item : o.getItems()) {
+                // 创建一个横向的布局放单个商品
                 LinearLayout itemLayout = new LinearLayout(holder.itemView.getContext());
                 itemLayout.setOrientation(LinearLayout.HORIZONTAL);
                 itemLayout.setPadding(0, 10, 0, 10);
                 itemLayout.setGravity(android.view.Gravity.CENTER_VERTICAL);
 
-                // 动态生成 1:1 图片
+                // 1. 生成 1:1 的商品图片
                 ImageView iv = new ImageView(holder.itemView.getContext());
-                int imgSize = (int) (60 * holder.itemView.getContext().getResources().getDisplayMetrics().density); // 60dp
+                int imgSize = (int) (50 * holder.itemView.getContext().getResources().getDisplayMetrics().density);
                 iv.setLayoutParams(new LinearLayout.LayoutParams(imgSize, imgSize));
                 iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
                 String imgUrl = item.getImageUrl();
                 if (imgUrl != null && imgUrl.contains("localhost")) {
-                    imgUrl = imgUrl.replace("localhost", "192.168.31.61");
+                    imgUrl = imgUrl.replace("localhost", "192.168.31.61"); // 替换为你的IP
                 }
                 Glide.with(holder.itemView.getContext()).load(imgUrl).placeholder(R.mipmap.ic_launcher).into(iv);
 
-                // 动态生成商品名称
+                // 2. 生成商品名称
                 TextView tvName = new TextView(holder.itemView.getContext());
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
                 params.setMargins(20, 0, 0, 0);
@@ -82,12 +83,13 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                 tvName.setTextColor(Color.parseColor("#333333"));
                 tvName.setTextSize(14);
 
-                // 动态生成数量
+                // 3. 生成商品数量
                 TextView tvQty = new TextView(holder.itemView.getContext());
                 tvQty.setText("x" + item.getQuantity());
                 tvQty.setTextColor(Color.parseColor("#666666"));
                 tvQty.setTextSize(14);
 
+                // 把图、名、数量组装起来塞进空盒子里
                 itemLayout.addView(iv);
                 itemLayout.addView(tvName);
                 itemLayout.addView(tvQty);
