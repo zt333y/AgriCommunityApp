@@ -124,4 +124,8 @@ public interface ApiService {
 
     @POST("/api/cart/delete")
     Call<Result<String>> deleteCartItem(@Query("cartId") Long cartId);
+
+    // 🌟 新增：商品上下架接口
+    @POST("/api/product/updateStatus")
+    Call<Result<String>> updateProductStatus(@Query("id") Long id, @Query("status") Integer status);
 }

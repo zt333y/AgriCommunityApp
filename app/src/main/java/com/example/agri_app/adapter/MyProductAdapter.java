@@ -36,7 +36,6 @@ public class MyProductAdapter extends RecyclerView.Adapter<MyProductAdapter.View
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // 绑定单件商品卡片布局
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_my_product, parent, false);
         return new ViewHolder(view);
     }
@@ -45,37 +44,71 @@ public class MyProductAdapter extends RecyclerView.Adapter<MyProductAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Product product = productList.get(position);
 
-        // 1. 设置商品基础信息
         holder.tvName.setText(product.getName());
-        holder.tvPrice.setText("￥" + product.getPrice());
-        holder.tvStock.setText("当前库存: " + product.getStock() + " 份");
+        holder.tvPrice.setText("￥" + product.getPrice() + " / " + product.getUnit());
+        holder.tvStock.setText("当前库存: " + product.getStock());
 
-        // 2. 加载商品图片
+        String displayUrl = product.getImageUrl();
+        if (displayUrl != null && displayUrl.contains("localhost")) {
+            displayUrl = displayUrl.replace("localhost", "192.168.31.61");
+        }
+
         Glide.with(holder.itemView.getContext())
-                .load(product.getImageUrl())
+                .load(displayUrl)
                 .placeholder(R.mipmap.ic_launcher)
                 .into(holder.ivProduct);
 
-        // 3. 根据审核状态动态改变标签颜色
+        // 🌟 状态显示（加上 ▾ 箭头暗示可以点击）
         if (product.getStatus() == null || product.getStatus() == 0) {
             holder.tvStatusBadge.setText("⏳ 审核中");
-            holder.tvStatusBadge.setBackgroundColor(Color.parseColor("#FF9800")); // 橙色
+            holder.tvStatusBadge.setBackgroundColor(Color.parseColor("#FF9800"));
         } else if (product.getStatus() == 1) {
-            holder.tvStatusBadge.setText("✅ 已上架");
-            holder.tvStatusBadge.setBackgroundColor(Color.parseColor("#4CAF50")); // 绿色
+            holder.tvStatusBadge.setText("✅ 已上架 ▾");
+            holder.tvStatusBadge.setBackgroundColor(Color.parseColor("#4CAF50"));
         } else if (product.getStatus() == 2) {
             holder.tvStatusBadge.setText("❌ 未通过");
-            holder.tvStatusBadge.setBackgroundColor(Color.parseColor("#F44336")); // 红色
+            holder.tvStatusBadge.setBackgroundColor(Color.parseColor("#F44336"));
+        } else if (product.getStatus() == 3) {
+            holder.tvStatusBadge.setText("⏸ 已下架 ▾");
+            holder.tvStatusBadge.setBackgroundColor(Color.parseColor("#9E9E9E"));
         }
 
-        // 4. 🌟 新增：点击商品卡片本身，跳转到发布页进行“修改”
+        // 🌟 核心：点击状态徽章，弹出上下架选择框
+        holder.tvStatusBadge.setOnClickListener(v -> {
+            // 只有上架(1)或下架(3)的状态允许手动切换，审核中的不允许
+            if (product.getStatus() == 1 || product.getStatus() == 3) {
+                String[] options = {"重新上架", "下架商品"};
+                new AlertDialog.Builder(v.getContext())
+                        .setTitle("修改商品状态")
+                        .setItems(options, (dialog, which) -> {
+                            int newStatus = (which == 0) ? 1 : 3;
+                            if (newStatus == product.getStatus()) return; // 没变化就不请求
+
+                            RetrofitClient.getApi().updateProductStatus(product.getId(), newStatus).enqueue(new Callback<Result<String>>() {
+                                @Override
+                                public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
+                                    if (response.body() != null && response.body().code == 200) {
+                                        product.setStatus(newStatus);
+                                        notifyItemChanged(position); // 局部刷新UI
+                                        Toast.makeText(v.getContext(), response.body().data, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                                @Override
+                                public void onFailure(Call<Result<String>> call, Throwable t) {}
+                            });
+                        }).show();
+            } else {
+                Toast.makeText(v.getContext(), "当前状态系统锁定，无法手动修改", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // 修改商品信息
         holder.itemView.setOnClickListener(v -> {
             int currentPosition = holder.getAdapterPosition();
             if (currentPosition == RecyclerView.NO_POSITION) return;
             Product currentProduct = productList.get(currentPosition);
 
             Intent intent = new Intent(v.getContext(), PublishActivity.class);
-            // 把旧数据统统塞进 Intent 里带过去
             intent.putExtra("EDIT_ID", currentProduct.getId());
             intent.putExtra("EDIT_NAME", currentProduct.getName());
             intent.putExtra("EDIT_PRICE", String.valueOf(currentProduct.getPrice()));
@@ -87,40 +120,30 @@ public class MyProductAdapter extends RecyclerView.Adapter<MyProductAdapter.View
             v.getContext().startActivity(intent);
         });
 
-        // 5. 处理删除按钮的点击事件
-        holder.itemView.findViewById(R.id.btn_delete).setOnClickListener(v -> {
+        // 彻底删除
+        holder.btnDelete.setOnClickListener(v -> {
             int currentPosition = holder.getAdapterPosition();
             if (currentPosition == RecyclerView.NO_POSITION) return;
-            Product currentProduct = productList.get(currentPosition);
 
-            // 弹出确认对话框
             new AlertDialog.Builder(v.getContext())
                     .setTitle("操作确认")
-                    .setMessage("确定要下架/删除商品 [" + currentProduct.getName() + "] 吗？删除后不可恢复。")
+                    .setMessage("确定要彻底删除 [" + productList.get(currentPosition).getName() + "] 吗？删除后不可恢复。")
                     .setPositiveButton("确定", (dialog, which) -> {
-                        // 发起网络请求删除商品
-                        RetrofitClient.getApi().deleteProduct(currentProduct.getId()).enqueue(new Callback<Result<String>>() {
+                        RetrofitClient.getApi().deleteProduct(productList.get(currentPosition).getId()).enqueue(new Callback<Result<String>>() {
                             @Override
                             public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
                                 if (response.body() != null && response.body().code == 200) {
                                     Toast.makeText(v.getContext(), "删除成功", Toast.LENGTH_SHORT).show();
-                                    // 动态刷新列表
                                     productList.remove(currentPosition);
                                     notifyItemRemoved(currentPosition);
                                     notifyItemRangeChanged(currentPosition, productList.size());
-                                } else {
-                                    Toast.makeText(v.getContext(), "删除失败", Toast.LENGTH_SHORT).show();
                                 }
                             }
-
                             @Override
-                            public void onFailure(Call<Result<String>> call, Throwable t) {
-                                Toast.makeText(v.getContext(), "网络异常", Toast.LENGTH_SHORT).show();
-                            }
+                            public void onFailure(Call<Result<String>> call, Throwable t) {}
                         });
                     })
-                    .setNegativeButton("取消", null)
-                    .show();
+                    .setNegativeButton("取消", null).show();
         });
     }
 
@@ -129,9 +152,8 @@ public class MyProductAdapter extends RecyclerView.Adapter<MyProductAdapter.View
         return productList == null ? 0 : productList.size();
     }
 
-    // 绑定 XML 中的控件
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivProduct;
+        ImageView ivProduct, btnDelete;
         TextView tvName, tvStock, tvPrice, tvStatusBadge;
 
         public ViewHolder(@NonNull View itemView) {
@@ -141,6 +163,7 @@ public class MyProductAdapter extends RecyclerView.Adapter<MyProductAdapter.View
             tvStock = itemView.findViewById(R.id.tv_stock);
             tvPrice = itemView.findViewById(R.id.tv_price);
             tvStatusBadge = itemView.findViewById(R.id.tv_status_badge);
+            btnDelete = itemView.findViewById(R.id.btn_delete);
         }
     }
 }

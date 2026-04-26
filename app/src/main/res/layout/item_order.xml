@@ -6,8 +6,10 @@
     android:layout_marginLeft="12dp"
     android:layout_marginRight="12dp"
     android:layout_marginTop="10dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="2dp">
+    android:layout_marginBottom="5dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="#FFFFFF">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -20,7 +22,7 @@
             android:layout_height="wrap_content"
             android:text="订单号: 123456789"
             android:textColor="#333333"
-            android:textSize="14sp"
+            android:textSize="13sp"
             android:textStyle="bold"/>
 
         <TextView
@@ -33,12 +35,22 @@
             android:textSize="14sp"
             android:textStyle="bold"/>
 
+        <LinearLayout
+            android:id="@+id/layout_order_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_order_no"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical"
+            android:background="#F9F9F9"
+            android:padding="8dp"/>
+
         <TextView
             android:id="@+id/tv_order_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_order_no"
-            android:layout_marginTop="8dp"
+            android:layout_below="@id/layout_order_items"
+            android:layout_marginTop="15dp"
             android:text="下单时间: 2026-05-01"
             android:textColor="#999999"
             android:textSize="12sp"/>
@@ -47,7 +59,7 @@
             android:id="@+id/tv_order_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_order_time"
+            android:layout_below="@id/layout_order_items"
             android:layout_alignParentRight="true"
             android:layout_marginTop="10dp"
             android:text="实付: ￥0.00"
@@ -58,14 +70,14 @@
         <Button
             android:id="@+id/btn_receive"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="36dp"
             android:layout_below="@id/tv_order_amount"
             android:layout_alignParentRight="true"
             android:layout_marginTop="10dp"
             android:text="确认收货"
             android:textColor="#FFFFFF"
             android:backgroundTint="#4CAF50"
-            android:textSize="12sp"
+            android:textSize="13sp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:visibility="gone" />
@@ -73,14 +85,14 @@
         <Button
             android:id="@+id/btn_review"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="36dp"
             android:layout_below="@id/tv_order_amount"
             android:layout_alignParentRight="true"
             android:layout_marginTop="10dp"
             android:text="评价订单"
             android:textColor="#FFFFFF"
             android:backgroundTint="#FFC107"
-            android:textSize="12sp"
+            android:textSize="13sp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:visibility="gone" />
