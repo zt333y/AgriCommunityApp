@@ -2,25 +2,34 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5"
-    android:fitsSystemWindows="true">
+    android:background="#F5F5F5">
 
-    <TextView
-        android:id="@+id/tv_title"
+    <RelativeLayout
+        android:id="@+id/layout_header"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:background="#4CAF50"
-        android:text="我的购物车"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:gravity="center"/>
+        android:fitsSystemWindows="true"
+        android:layout_alignParentTop="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="我的购物车"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/layout_empty_cart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tv_title"
+        android:layout_below="@id/layout_header"
         android:layout_above="@id/bottom_checkout_bar"
         android:orientation="vertical"
         android:gravity="center"
@@ -45,7 +54,7 @@
         android:id="@+id/rv_cart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tv_title"
+        android:layout_below="@id/layout_header"
         android:layout_above="@id/bottom_checkout_bar"/>
 
     <LinearLayout

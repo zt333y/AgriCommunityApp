@@ -3,19 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F7FA"
-    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#4CAF50"
-        android:gravity="center"
-        android:padding="15dp"
-        android:text="📋 今日采摘汇总清单"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:fitsSystemWindows="true">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text="📋 今日采摘汇总清单"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_picking_list"
