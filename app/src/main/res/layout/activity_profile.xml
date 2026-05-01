@@ -9,18 +9,18 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#4CAF50"
+        android:background="#0097af"
         android:fitsSystemWindows="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="180dp"
             android:padding="20dp">
 
             <ImageView
                 android:id="@+id/iv_avatar"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:layout_centerVertical="true"
                 android:src="@mipmap/ic_launcher_round"
                 android:scaleType="centerCrop"/>
@@ -57,10 +57,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:background="#81C784"
-                    android:paddingLeft="8dp"
-                    android:paddingTop="2dp"
-                    android:paddingRight="8dp"
-                    android:paddingBottom="2dp"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="2dp"
                     android:text="社区居民"
                     android:textColor="#FFFFFF"
                     android:textSize="12sp" />
@@ -85,80 +83,59 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
                 android:gravity="center_vertical"
                 android:paddingLeft="20dp"
                 android:text="⚙️ 修改个人资料"
                 android:textColor="#333333"
                 android:textSize="16sp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#EEEEEE" />
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" />
 
             <TextView
                 android:id="@+id/btn_my_orders"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
                 android:gravity="center_vertical"
                 android:paddingLeft="20dp"
                 android:text="📦 我的订单"
                 android:textColor="#333333"
                 android:textSize="16sp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#EEEEEE" />
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" />
 
             <TextView
                 android:id="@+id/btn_my_address"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
                 android:gravity="center_vertical"
                 android:paddingLeft="20dp"
                 android:text="📍 我的收货地址"
                 android:textColor="#333333"
                 android:textSize="16sp" />
 
-            <View
-                android:id="@+id/line_apply"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#EEEEEE"
-                android:visibility="gone" />
+            <View android:id="@+id/line_apply" android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" android:visibility="gone" />
 
             <TextView
                 android:id="@+id/btn_apply_role"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
                 android:gravity="center_vertical"
                 android:paddingLeft="20dp"
-                android:text="📝 资质入驻申请 (农户/团长)"
+                android:text="📝 资质入驻申请"
                 android:textColor="#333333"
                 android:textSize="16sp"
                 android:visibility="gone" />
 
-            <View
-                android:id="@+id/line_farmer"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#EEEEEE"
-                android:visibility="gone" />
+            <View android:id="@+id/line_farmer" android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" android:visibility="gone" />
 
             <TextView
                 android:id="@+id/btn_my_products"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
                 android:gravity="center_vertical"
                 android:paddingLeft="20dp"
                 android:text="📦 管理功能入口"
@@ -166,26 +143,19 @@
                 android:textSize="16sp"
                 android:visibility="gone" />
 
-            <View
-                android:id="@+id/line_picking"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#EEEEEE"
-                android:visibility="gone" />
+            <View android:id="@+id/line_picking" android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" android:visibility="gone" />
 
             <TextView
                 android:id="@+id/btn_picking_summary"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
                 android:gravity="center_vertical"
                 android:paddingLeft="20dp"
                 android:text="📋 今日采摘汇总报表"
                 android:textColor="#333333"
                 android:textSize="16sp"
                 android:visibility="gone" />
-
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -193,13 +163,11 @@
         android:id="@+id/btn_logout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_margin="20dp"
         android:layout_marginTop="30dp"
         android:backgroundTint="#F56C6C"
         android:text="安 全 退 出"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
         android:textStyle="bold" />
-
 </LinearLayout>

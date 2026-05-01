@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
     // 请确保 IP 地址与你后端运行的电脑一致
-    private static final String BASE_URL = "http://192.168.31.61:8080/";
+    private static final String BASE_URL = "http://192.168.31.60:8080/";
     private static Retrofit retrofit = null;
     private static String authToken = ""; // 🌟 新增：静态存储 Token
 
