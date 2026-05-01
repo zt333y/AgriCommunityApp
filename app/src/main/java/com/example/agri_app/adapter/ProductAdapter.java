@@ -47,68 +47,77 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.tvName.setText(p.getName());
         holder.tvDesc.setText(p.getDescription());
 
-        // 显示真实价格单位
-        holder.tvPrice.setText("￥" + p.getPrice() + " / " + p.getUnit());
+        // 🌟 显示真实价格单位
+        holder.tvPrice.setText("￥" + p.getPrice() + " / " + (p.getUnit() != null ? p.getUnit() : "件"));
 
-        // 展示后端的销量和评分
+        // 🌟 展示后端的销量和评分
         int sales = p.getSales() != null ? p.getSales() : 0;
         double rating = p.getRating() != null ? p.getRating() : 5.0;
         holder.tvSalesRating.setText(String.format("已售 %d | 评分 %.1f", sales, rating));
 
-        // 使用 Glide 加载图片
+        // 🌟 核心修正：精准替换为你 RetrofitClient 里的真实 IP (192.168.31.60)
         String imgUrl = p.getImageUrl();
         if (imgUrl != null && imgUrl.contains("localhost")) {
-            imgUrl = imgUrl.replace("localhost", "192.168.31.61");
+            imgUrl = imgUrl.replace("localhost", "192.168.31.60");
         }
 
+        // 使用 Glide 加载图片
         if (imgUrl != null && !imgUrl.isEmpty()) {
             Glide.with(holder.itemView.getContext())
                     .load(imgUrl)
-                    .placeholder(R.mipmap.ic_launcher)
+                    .placeholder(R.mipmap.ic_launcher) // 加载中显示的默认图
                     .into(holder.ivImage);
         } else {
-            holder.ivImage.setImageResource(R.mipmap.ic_launcher);
+            holder.ivImage.setImageResource(R.mipmap.ic_launcher); // 如果没有图片，给个兜底图
         }
 
-        // 🌟 修复：加入购物车的写法
-        holder.ivAddCart.setOnClickListener(v -> {
-            SharedPreferences sp = v.getContext().getSharedPreferences("UserPrefs", android.content.Context.MODE_PRIVATE);
-            Long userId = sp.getLong("userId", 0L);
-            if (userId == 0) {
-                Toast.makeText(v.getContext(), "请先登录", Toast.LENGTH_SHORT).show();
-                return;
-            }
+        // 🌟 加入购物车按钮点击事件
+        if (holder.ivAddCart != null) {
+            holder.ivAddCart.setOnClickListener(v -> {
+                SharedPreferences sp = v.getContext().getSharedPreferences("UserPrefs", android.content.Context.MODE_PRIVATE);
+                Long userId = sp.getLong("userId", 0L);
+                if (userId == 0) {
+                    Toast.makeText(v.getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-            // 🌟 核心修正：使用带参数的构造函数创建购物车对象
-            Cart cart = new Cart(userId, p.getId(), 1);
+                // 核心修正：调用正确的实体和接口参数
+                Cart cart = new Cart(userId, p.getId(), 1);
 
-            // 🌟 核心修正：调用 addCart 接口
-            RetrofitClient.getApi().addCart(cart).enqueue(new Callback<Result<String>>() {
-                @Override
-                public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
-                    if (response.body() != null && response.body().code == 200) {
-                        Toast.makeText(v.getContext(), "🛒 成功加入购物车！", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(v.getContext(), "加入失败：" + (response.body() != null ? response.body().msg : ""), Toast.LENGTH_SHORT).show();
+                RetrofitClient.getApi().addCart(cart).enqueue(new Callback<Result<String>>() {
+                    @Override
+                    public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
+                        if (response.body() != null && response.body().code == 200) {
+                            Toast.makeText(v.getContext(), "🛒 成功加入购物车！", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(v.getContext(), "加入失败：" + (response.body() != null ? response.body().msg : ""), Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<Result<String>> call, Throwable t) {
-                    Toast.makeText(v.getContext(), "网络异常", Toast.LENGTH_SHORT).show();
-                }
+                    @Override
+                    public void onFailure(Call<Result<String>> call, Throwable t) {
+                        Toast.makeText(v.getContext(), "网络异常", Toast.LENGTH_SHORT).show();
+                    }
+                });
             });
-        });
+        }
 
-        // 点击商品跳转到详情页
+        // 🌟 点击商品跳转到详情页
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
             intent.putExtra("ID", p.getId());
             intent.putExtra("NAME", p.getName());
             intent.putExtra("PRICE", p.getPrice());
             intent.putExtra("DESC", p.getDescription());
-            intent.putExtra("IMAGE_URL", p.getImageUrl());
-            // 传递产地和单位
+
+            // 跳转时同样携带修复好的 IP 图片地址
+            String finalImgUrl = p.getImageUrl();
+            if (finalImgUrl != null && finalImgUrl.contains("localhost")) {
+                finalImgUrl = finalImgUrl.replace("localhost", "192.168.31.60");
+            }
+            intent.putExtra("IMAGE_URL", finalImgUrl);
+
+            // 传递产地和单位供详情页解析
             intent.putExtra("UNIT", p.getUnit());
             intent.putExtra("FARMER_ADDRESS", p.getFarmerAddress());
             v.getContext().startActivity(intent);
@@ -131,6 +140,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             tvDesc = view.findViewById(R.id.tv_product_desc);
             tvPrice = view.findViewById(R.id.tv_product_price);
 
+            // 绑定新加入 xml 的控件
             tvSalesRating = view.findViewById(R.id.tv_sales_rating);
             ivAddCart = view.findViewById(R.id.iv_add_cart);
         }
