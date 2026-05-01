@@ -49,8 +49,8 @@ public class MyProductAdapter extends RecyclerView.Adapter<MyProductAdapter.View
         holder.tvStock.setText("当前库存: " + product.getStock());
 
         String displayUrl = product.getImageUrl();
-        if (displayUrl != null && displayUrl.contains("localhost")) {
-            displayUrl = displayUrl.replace("localhost", "192.168.31.61");
+        if (displayUrl != null && displayUrl.contains("/uploads/")) {
+            displayUrl = "http://192.168.31.60:8080" + displayUrl.substring(displayUrl.indexOf("/uploads/"));
         }
 
         Glide.with(holder.itemView.getContext())

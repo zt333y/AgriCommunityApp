@@ -51,7 +51,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         holder.tvTime.setText("下单时间: " + o.getCreateTime());
         holder.tvAmount.setText("实付: ￥" + o.getTotalAmount());
 
-// 🌟 这一段是渲染商品明细的核心！一定要加在 onBindViewHolder 里面！
+        // 🌟 这一段是渲染商品明细的核心！
         holder.layoutOrderItems.removeAllViews(); // 先清空，防止列表滑动时数据错乱
         if (o.getItems() != null && !o.getItems().isEmpty()) {
             holder.layoutOrderItems.setVisibility(View.VISIBLE);
@@ -69,10 +69,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                 iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
                 String imgUrl = item.getImageUrl();
-                if (imgUrl != null && imgUrl.contains("localhost")) {
-                    imgUrl = imgUrl.replace("localhost", "192.168.31.61"); // 替换为你的IP
+                // 🌟🌟🌟 终极修复：使用暴力截断旧 IP，强行拼接当前绝对正确的 IP！
+                if (imgUrl != null && imgUrl.contains("/uploads/")) {
+                    imgUrl = "http://192.168.31.60:8080" + imgUrl.substring(imgUrl.indexOf("/uploads/"));
                 }
-                Glide.with(holder.itemView.getContext()).load(imgUrl).placeholder(R.mipmap.ic_launcher).into(iv);
+
+                Glide.with(holder.itemView.getContext())
+                        .load(imgUrl)
+                        .placeholder(R.mipmap.ic_launcher)
+                        .into(iv);
 
                 // 2. 生成商品名称
                 TextView tvName = new TextView(holder.itemView.getContext());

@@ -54,8 +54,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         // 图片渲染
         if (c.getImageUrl() != null && !c.getImageUrl().isEmpty()) {
             String imageUrl = c.getImageUrl();
-            if (imageUrl.contains("localhost")) {
-                imageUrl = imageUrl.replace("localhost", "192.168.31.61");
+            // 🌟 换成这段终极截断拼接法
+            if (imageUrl.contains("/uploads/")) {
+                imageUrl = "http://192.168.31.60:8080" + imageUrl.substring(imageUrl.indexOf("/uploads/"));
             }
             Glide.with(holder.itemView.getContext()).load(imageUrl).placeholder(R.mipmap.ic_launcher).into(holder.ivImage);
         } else {
