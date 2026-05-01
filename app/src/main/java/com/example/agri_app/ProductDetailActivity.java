@@ -47,16 +47,40 @@ public class ProductDetailActivity extends AppCompatActivity {
         String desc = getIntent().getStringExtra("DESC");
         String imageUrl = getIntent().getStringExtra("IMAGE_URL");
 
-        // 3. 把数据展示在界面上
+        // 🌟 接收新增加的字段：单位和农户地址
+        String unit = getIntent().getStringExtra("UNIT");
+        String fullAddress = getIntent().getStringExtra("FARMER_ADDRESS");
+
+        // 3. 把基础数据展示在界面上
         tvName.setText(name);
-        tvPrice.setText("￥" + price);
         tvDesc.setText(desc);
 
+        // 🌟 修复：拼接价格单位
+        tvPrice.setText("￥" + price + " / " + (unit != null ? unit : "件"));
+
+        // 🌟 修复：智能解析农户地址作为产地 (提取城市名)
+        TextView tvOrigin = findViewById(R.id.tv_origin);
+        if (tvOrigin != null) {
+            String origin = "源产地直发";
+            if (fullAddress != null && fullAddress.contains("市")) {
+                int provIdx = fullAddress.indexOf("省");
+                int cityIdx = fullAddress.indexOf("市");
+                if (cityIdx != -1) {
+                    origin = fullAddress.substring(provIdx != -1 ? provIdx + 1 : 0, cityIdx + 1);
+                }
+            }
+            tvOrigin.setText("📍 产地: " + origin);
+        }
+
+        // 加载图片
+        if (imageUrl != null && imageUrl.contains("localhost")) {
+            imageUrl = imageUrl.replace("localhost", "192.168.31.61");
+        }
         if (imageUrl != null && !imageUrl.isEmpty()) {
             Glide.with(this).load(imageUrl).into(ivImage);
         }
 
-        // 🌟 4. 核心新增：去服务器拉取这件商品的所有的评价！
+        // 4. 去服务器拉取这件商品的所有的评价！
         if (productId != 0) {
             loadProductReviews(productId);
         }
@@ -73,7 +97,6 @@ public class ProductDetailActivity extends AppCompatActivity {
 
             Cart cart = new Cart(currentUserId, productId, 1);
 
-            // 发起网络请求加入购物车
             RetrofitClient.getApi().addCart(cart).enqueue(new Callback<Result<String>>() {
                 @Override
                 public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
@@ -122,20 +145,20 @@ public class ProductDetailActivity extends AppCompatActivity {
                     // =====================================
                     float totalScore = 0;
                     for (ReviewVO review : reviews) {
-                        totalScore += (review.rating != null ? review.rating : 5);
+                        // 🌟 修复：从 review.rating 换成 review.score
+                        totalScore += (review.score != null ? review.score : 5);
                     }
                     float averageScore = totalScore / reviews.size();
 
                     // 更新顶部综合评分 UI
                     rbTotal.setVisibility(View.VISIBLE);
                     rbTotal.setRating(averageScore);
-                    // 格式化为保留一位小数 (例如 4.5分 (12条))
                     tvTotalScore.setText(String.format("%.1f分 (%d条)", averageScore, reviews.size()));
-                    tvTotalScore.setTextColor(Color.parseColor("#FF9800")); // 变成醒目的橙色
-                    tvTotalScore.setTypeface(null, android.graphics.Typeface.BOLD); // 加粗
+                    tvTotalScore.setTextColor(Color.parseColor("#FF9800"));
+                    tvTotalScore.setTypeface(null, android.graphics.Typeface.BOLD);
 
                     // =====================================
-                    // 循环遍历评价数据，动态生成视图塞进页面里
+                    // 循环遍历评价数据，动态生成视图
                     // =====================================
                     for (ReviewVO review : reviews) {
                         View reviewView = getLayoutInflater().inflate(R.layout.item_review, reviewsContainer, false);
@@ -146,11 +169,13 @@ public class ProductDetailActivity extends AppCompatActivity {
 
                         tvUser.setText(review.userName != null ? review.userName : "匿名用户");
                         tvContent.setText(review.content);
-                        rbRating.setRating(review.rating != null ? review.rating : 5);
+
+                        // 🌟 修复：从 review.rating 换成 review.score
+                        rbRating.setRating(review.score != null ? review.score : 5);
 
                         reviewsContainer.addView(reviewView);
 
-                        // 加一条浅灰色的分割线
+                        // 分割线
                         View line = new View(ProductDetailActivity.this);
                         line.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2));
                         line.setBackgroundColor(Color.parseColor("#EEEEEE"));
