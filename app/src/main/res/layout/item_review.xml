@@ -20,6 +20,7 @@
             app:cardElevation="0dp">
 
             <ImageView
+                android:id="@+id/iv_reviewer_avatar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="5dp"

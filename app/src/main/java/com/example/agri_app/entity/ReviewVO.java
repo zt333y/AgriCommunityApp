@@ -12,4 +12,13 @@ public class ReviewVO {
     public Integer score;
 
     public String createTime;
+    private String userAvatar;
+
+    public String getUserAvatar() {
+        return userAvatar;
+    }
+
+    public void setUserAvatar(String userAvatar) {
+        this.userAvatar = userAvatar;
+    }
 }

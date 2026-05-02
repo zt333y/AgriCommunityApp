@@ -131,10 +131,31 @@ public class ProductDetailActivity extends AppCompatActivity {
                         TextView tvContent = reviewView.findViewById(R.id.tv_review_content);
                         RatingBar rbRating = reviewView.findViewById(R.id.rb_review_rating);
 
+                        // 🌟 绑定头像 ImageView控件
+                        ImageView ivAvatar = reviewView.findViewById(R.id.iv_reviewer_avatar);
+
                         // 🌟 核心：调用真正的 username 和 score
                         tvUser.setText(review.username != null ? review.username : "匿名用户");
                         tvContent.setText(review.content);
                         rbRating.setRating(review.score != null ? review.score : 5);
+
+                        // 🌟🌟 核心新增：加载头像并拼接真实服务器 IP，设置圆角
+                        String avatarUrl = review.getUserAvatar(); // 确保你 Android 端的 ReviewVO 里已经加了这个字段的 Getter 方法
+                        if (avatarUrl != null && !avatarUrl.isEmpty()) {
+                            String displayUrl = avatarUrl;
+                            if (displayUrl.contains("/uploads/")) {
+                                displayUrl = "http://192.168.31.60:8080" + displayUrl.substring(displayUrl.indexOf("/uploads/"));
+                            }
+
+                            Glide.with(ProductDetailActivity.this)
+                                    .load(displayUrl)
+                                    .placeholder(R.mipmap.ic_launcher_round) // 默认头像
+                                    .circleCrop() // 将头像裁剪为圆形
+                                    .into(ivAvatar);
+                        } else {
+                            // 没有头像时，显示默认图标
+                            ivAvatar.setImageResource(R.mipmap.ic_launcher_round);
+                        }
 
                         reviewsContainer.addView(reviewView);
                         View line = new View(ProductDetailActivity.this);
