@@ -42,7 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             // 2. 🌟 手机号格式强校验
             if (!phone.matches("^1[3-9]\\d{9}$")) {
-                Toast.makeText(this, "⚠️ 手机号格式错误，请输入真实的11位手机号", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "手机号格式错误，请输入真实的11位手机号", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -60,7 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
                     if (response.body() != null && response.body().code == 200) {
-                        Toast.makeText(RegisterActivity.this, "🎉 注册成功！请登录", Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegisterActivity.this, "注册成功！请登录", Toast.LENGTH_LONG).show();
                         finish();
                     } else {
                         String errorMsg = (response.body() != null) ? response.body().msg : "注册失败";

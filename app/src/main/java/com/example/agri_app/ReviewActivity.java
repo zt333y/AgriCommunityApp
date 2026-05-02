@@ -140,7 +140,7 @@ public class ReviewActivity extends AppCompatActivity {
             btnSkip.setEnabled(true);
             showReviewForCurrentItem();
         } else {
-            Toast.makeText(ReviewActivity.this, "🎉 评价环节已完成，感谢支持！", Toast.LENGTH_LONG).show();
+            Toast.makeText(ReviewActivity.this, "已评价", Toast.LENGTH_LONG).show();
             finish();
         }
     }

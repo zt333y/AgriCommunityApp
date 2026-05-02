@@ -148,7 +148,7 @@ public class HomeFragment extends Fragment {
                 if (response.body() != null && response.body().code == 200) {
                     recyclerView.setAdapter(new ProductAdapter(response.body().data));
                 } else {
-                    Toast.makeText(getContext(), "获取商品失败，请检查接口！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "获取商品失败，请检查接口", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override

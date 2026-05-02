@@ -61,7 +61,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="📋 待核销商品明细："
+                android:text="待核销商品明细："
                 android:textColor="#333333"
                 android:textSize="13sp"
                 android:textStyle="bold" />

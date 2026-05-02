@@ -197,7 +197,7 @@
                 android:background="#FFFFFF"
                 android:elevation="2dp"
                 android:gravity="top|left"
-                android:hint="详细地址：如街道、小区、门牌号"
+                android:hint="请输入详细地址"
                 android:textColorHint="#B0B0B0"
                 android:textColor="#333333"
                 android:textSize="15sp"

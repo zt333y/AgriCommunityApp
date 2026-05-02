@@ -39,6 +39,7 @@ public class PublishActivity extends AppCompatActivity {
     private Uri selectedImageUri = null;
     private ImageView ivImage;
     private View tvImageHint;
+    private TextView tvChangeHint; // 🌟 声明新增的更换提示控件
 
     private final String[] CATEGORY_OPTIONS = {"新鲜水果", "有机蔬菜", "肉禽蛋品", "粮油调味", "水产海鲜", "农副加工"};
     private final String[] UNIT_OPTIONS = {"斤", "公斤", "箱", "个", "只", "包", "份"};
@@ -47,13 +48,20 @@ public class PublishActivity extends AppCompatActivity {
     private Long editProductId = null;
     private String oldImageUrl = "";
 
+    // 选择图片的回调
     private final ActivityResultLauncher<String> imagePickerLauncher = registerForActivityResult(
             new ActivityResultContracts.GetContent(),
             uri -> {
                 if (uri != null) {
                     selectedImageUri = uri;
                     ivImage.setImageURI(uri);
-                    tvImageHint.setVisibility(View.GONE);
+
+                    tvImageHint.setVisibility(View.GONE); // 隐藏居中的大提示
+
+                    // 🌟 用户选完新图片后，显示底部的半透明更换提示
+                    if (tvChangeHint != null) {
+                        tvChangeHint.setVisibility(View.VISIBLE);
+                    }
                 }
             }
     );
@@ -63,6 +71,7 @@ public class PublishActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
         findViewById(R.id.btn_back).setOnClickListener(v -> finish());
+
         TextView tvTitle = findViewById(R.id.tv_publish_title);
         EditText etName = findViewById(R.id.et_pub_name);
         EditText etPrice = findViewById(R.id.et_pub_price);
@@ -72,8 +81,10 @@ public class PublishActivity extends AppCompatActivity {
 
         ivImage = findViewById(R.id.iv_pub_image);
         tvImageHint = findViewById(R.id.tv_image_hint);
+        tvChangeHint = findViewById(R.id.tv_change_hint); // 🌟 绑定控件
         CardView layoutImagePicker = findViewById(R.id.layout_image_picker);
 
+        // 点击卡片触发图片选择器
         layoutImagePicker.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
 
         spinnerCategory = findViewById(R.id.spinner_category);
@@ -81,10 +92,11 @@ public class PublishActivity extends AppCompatActivity {
         spinnerCategory.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, CATEGORY_OPTIONS));
         spinnerUnit.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, UNIT_OPTIONS));
 
+        // 判断是否是“修改农产品”的入口
         Intent intent = getIntent();
         if (intent.hasExtra("EDIT_ID")) {
             editProductId = intent.getLongExtra("EDIT_ID", -1);
-            tvTitle.setText("✏️ 修改农产品");
+            tvTitle.setText("修改农产品");
             btnPublish.setText("保存修改");
 
             etName.setText(intent.getStringExtra("EDIT_NAME"));
@@ -96,16 +108,30 @@ public class PublishActivity extends AppCompatActivity {
             setSpinnerSelection(spinnerCategory, CATEGORY_OPTIONS, intent.getStringExtra("EDIT_CATEGORY"));
             setSpinnerSelection(spinnerUnit, UNIT_OPTIONS, intent.getStringExtra("EDIT_UNIT"));
 
+            // 🌟🌟 核心修复：加载原图时，强制拼接上后端的真实 IP 地址
             if (oldImageUrl != null && !oldImageUrl.isEmpty()) {
                 String displayUrl = oldImageUrl;
-                if (displayUrl.contains("localhost")) {
-                    displayUrl = displayUrl.replace("localhost", "192.168.31.61");
+
+                // 如果是残缺的相对路径，补全为服务器真实地址
+                if (displayUrl.contains("/uploads/")) {
+                    displayUrl = "http://192.168.31.60:8080" + displayUrl.substring(displayUrl.indexOf("/uploads/"));
                 }
-                Glide.with(this).load(displayUrl).into(ivImage);
-                tvImageHint.setVisibility(View.GONE);
+
+                Glide.with(this)
+                        .load(displayUrl)
+                        .placeholder(R.mipmap.ic_launcher) // 加入占位图防崩溃
+                        .into(ivImage);
+
+                tvImageHint.setVisibility(View.GONE); // 隐藏居中的大提示
+
+                // 核心：显示底部半透明更换提示
+                if (tvChangeHint != null) {
+                    tvChangeHint.setVisibility(View.VISIBLE);
+                }
             }
         }
 
+        // 发布/保存按钮逻辑
         btnPublish.setOnClickListener(v -> {
             String name = etName.getText().toString().trim();
             String priceStr = etPrice.getText().toString().trim();
@@ -126,11 +152,12 @@ public class PublishActivity extends AppCompatActivity {
             btnPublish.setText("数据处理中...");
             btnPublish.setEnabled(false);
 
+            // 🌟 核心保留：如果是修改商品，且没有选新图片，就直接提交原图的 oldImageUrl
             if (editProductId != null && selectedImageUri == null) {
                 submitProduct(farmerId, name, category, priceStr, stockStr, unit, desc, oldImageUrl, btnPublish, true);
             } else {
                 if (selectedImageUri == null) {
-                    Toast.makeText(this, "⚠️ 请点击虚线框选择一张商品图片！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "请点击虚线框选择一张商品图片！", Toast.LENGTH_SHORT).show();
                     btnPublish.setText(editProductId != null ? "保存修改" : "立即发布");
                     btnPublish.setEnabled(true);
                     return;
@@ -190,7 +217,7 @@ public class PublishActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
                 if (response.body() != null && response.body().code == 200) {
-                    Toast.makeText(PublishActivity.this, isEdit ? "🎉 修改成功！" : "🎉 商品发布成功！", Toast.LENGTH_LONG).show();
+                    Toast.makeText(PublishActivity.this, isEdit ? "修改成功" : "商品发布成功", Toast.LENGTH_LONG).show();
                     finish();
                 } else {
                     Toast.makeText(PublishActivity.this, "操作失败", Toast.LENGTH_SHORT).show();

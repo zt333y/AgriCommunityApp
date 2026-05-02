@@ -46,14 +46,14 @@ public class PickingListAdapter extends RecyclerView.Adapter<PickingListAdapter.
         holder.btnDone.setOnClickListener(v -> {
             new AlertDialog.Builder(v.getContext())
                     .setTitle("发货确认")
-                    .setMessage("确定已采摘完毕？这将会把包含【" + item.getProductName() + "】的所有待发货订单标记为已发货，并通知团长接收。")
+                    .setMessage("确定已采摘完毕？这将会把包含【" + item.getProductName() + "】的所有待发货订单标记为已发货")
                     .setPositiveButton("确定发货", (dialog, which) -> {
                         // 发起网络请求
                         RetrofitClient.getApi().shipByProduct(item.getProductId()).enqueue(new Callback<Result<String>>() {
                             @Override
                             public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
                                 if (response.body() != null && response.body().code == 200) {
-                                    Toast.makeText(v.getContext(), "✅ 发货成功！已流转至社区团长", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(v.getContext(), "发货成功", Toast.LENGTH_SHORT).show();
                                     // 从列表中移除该项，更新 UI
                                     int currentPos = holder.getAdapterPosition();
                                     list.remove(currentPos);

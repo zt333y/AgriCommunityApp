@@ -98,7 +98,7 @@ public class MyProductAdapter extends RecyclerView.Adapter<MyProductAdapter.View
                             });
                         }).show();
             } else {
-                Toast.makeText(v.getContext(), "当前状态系统锁定，无法手动修改", Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), "无法修改", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -127,7 +127,7 @@ public class MyProductAdapter extends RecyclerView.Adapter<MyProductAdapter.View
 
             new AlertDialog.Builder(v.getContext())
                     .setTitle("操作确认")
-                    .setMessage("确定要彻底删除 [" + productList.get(currentPosition).getName() + "] 吗？删除后不可恢复。")
+                    .setMessage("确定要彻底删除 [" + productList.get(currentPosition).getName() + "] 吗？删除后不可恢复")
                     .setPositiveButton("确定", (dialog, which) -> {
                         RetrofitClient.getApi().deleteProduct(productList.get(currentPosition).getId()).enqueue(new Callback<Result<String>>() {
                             @Override

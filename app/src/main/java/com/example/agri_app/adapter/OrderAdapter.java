@@ -127,12 +127,19 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                 holder.tvLeaderDetails.setText("团长: " + lName + "\n电话: " + lPhone);
                 holder.tvPickupAddress.setText("提货地址: " + lAddress);
 
-            } else if (o.getStatus() == 2) {
-                holder.tvStatus.setText("待评价");
-                holder.tvStatus.setTextColor(Color.parseColor("#4CAF50"));
-                holder.btnReview.setVisibility(View.VISIBLE);
+            } else if (o.getStatus() == 2 || o.getStatus() == 3) {
+                // 🌟 修复合并：状态2(待评价)和状态3(已完成)，都进行24小时售后判断
 
-                // 🌟🌟 核心：计算提货是否在 24 小时内
+                if (o.getStatus() == 2) {
+                    holder.tvStatus.setText("待评价");
+                    holder.tvStatus.setTextColor(Color.parseColor("#4CAF50"));
+                    holder.btnReview.setVisibility(View.VISIBLE);
+                } else {
+                    holder.tvStatus.setText("已完成");
+                    holder.tvStatus.setTextColor(Color.parseColor("#9E9E9E"));
+                }
+
+                // 🌟 核心：计算提货是否在 24 小时内（即便评价了也可以售后）
                 if (o.getReceiveTime() != null) {
                     try {
                         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
@@ -149,14 +156,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                     }
                 }
 
-            } else if (o.getStatus() == 3) {
-                holder.tvStatus.setText("已完成");
-                holder.tvStatus.setTextColor(Color.parseColor("#9E9E9E"));
-
-                // 🌟🌟 新增：售后相关状态解析
             } else if (o.getStatus() == 5) {
                 holder.tvStatus.setText("售后审核中");
                 holder.tvStatus.setTextColor(Color.parseColor("#FF9800"));
+
             } else if (o.getStatus() == 6) {
                 holder.tvStatus.setText("待退回团长");
                 holder.tvStatus.setTextColor(Color.parseColor("#E91E63"));
@@ -173,6 +176,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             } else if (o.getStatus() == 7) {
                 holder.tvStatus.setText("售后完成");
                 holder.tvStatus.setTextColor(Color.parseColor("#9E9E9E"));
+
             } else if (o.getStatus() == 8) {
                 holder.tvStatus.setText("售后被拒");
                 holder.tvStatus.setTextColor(Color.parseColor("#F44336"));
@@ -189,7 +193,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                 @Override
                 public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
                     if (response.body() != null && response.body().code == 200) {
-                        Toast.makeText(v.getContext(), "收货成功，快去评价商品吧！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), "收货成功，快去评价商品吧", Toast.LENGTH_SHORT).show();
                         currentOrder.setStatus(2);
                         // 记录本地时间，避免重启前无法申请售后
                         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
@@ -229,7 +233,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
 
             new android.app.AlertDialog.Builder(v.getContext())
                     .setTitle("申请售后")
-                    .setMessage("提示：提货超过24小时将无法提交售后申请。")
+                    .setMessage("提示：提货超过24小时将无法提交售后申请")
                     .setView(inputReason)
                     .setPositiveButton("提交申请", (dialog, which) -> {
                         String reason = inputReason.getText().toString().trim();

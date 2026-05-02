@@ -63,32 +63,32 @@ public class GroupLeaderOrderAdapter extends RecyclerView.Adapter<GroupLeaderOrd
         holder.btnAction.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#4CAF50")));
 
         if (o.getStatus() == 1) {
-            holder.tvStatus.setText("🚚 运输中 (需入库)");
+            holder.tvStatus.setText("运输中 (需入库)");
             holder.tvStatus.setTextColor(Color.parseColor("#FF9800"));
             holder.btnAction.setText("确认到货 (入库)");
             holder.btnAction.setVisibility(View.VISIBLE);
             holder.btnAction.setOnClickListener(v -> handleAction(v, o, 1));
 
         } else if (o.getStatus() == 4) {
-            holder.tvStatus.setText("📦 待居民提货");
+            holder.tvStatus.setText("待居民提货");
             holder.tvStatus.setTextColor(Color.parseColor("#2196F3"));
-            holder.btnAction.setText("扫码/手动核销");
+            holder.btnAction.setText("核销");
             holder.btnAction.setVisibility(View.VISIBLE);
             holder.btnAction.setOnClickListener(v -> handleAction(v, o, 4));
 
         } else if (o.getStatus() == 2 || o.getStatus() == 3) { // 🌟 拆分>=2的判断
-            holder.tvStatus.setText("✅ 已提货核销");
+            holder.tvStatus.setText("已提货核销");
             holder.tvStatus.setTextColor(Color.parseColor("#9E9E9E"));
 
             // ==========================================
             // 🌟🌟🌟 新增：团长端对售后状态的拦截展示 🌟🌟🌟
             // ==========================================
         } else if (o.getStatus() == 5) {
-            holder.tvStatus.setText("🔄 用户申请售后中");
+            holder.tvStatus.setText("用户申请售后中");
             holder.tvStatus.setTextColor(Color.parseColor("#FF9800"));
 
         } else if (o.getStatus() == 6) {
-            holder.tvStatus.setText("🔙 待用户退回商品");
+            holder.tvStatus.setText("待用户退回商品");
             holder.tvStatus.setTextColor(Color.parseColor("#E91E63")); // 粉红色警告
 
             // 🌟 核心：显示收退货按钮
@@ -98,11 +98,11 @@ public class GroupLeaderOrderAdapter extends RecyclerView.Adapter<GroupLeaderOrd
             holder.btnAction.setOnClickListener(v -> handleAction(v, o, 6)); // 传入状态 6
 
         } else if (o.getStatus() == 7) {
-            holder.tvStatus.setText("✅ 已收退货 (退款中)");
+            holder.tvStatus.setText("已收退货");
             holder.tvStatus.setTextColor(Color.parseColor("#9E9E9E"));
 
         } else if (o.getStatus() == 8) {
-            holder.tvStatus.setText("❌ 售后被拒");
+            holder.tvStatus.setText("售后被拒");
             holder.tvStatus.setTextColor(Color.parseColor("#F44336"));
 
         } else {
@@ -141,7 +141,7 @@ public class GroupLeaderOrderAdapter extends RecyclerView.Adapter<GroupLeaderOrd
                         @Override
                         public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
                             if (response.body() != null && response.body().code == 200) {
-                                Toast.makeText(v.getContext(), "操作成功！", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(v.getContext(), "操作成功", Toast.LENGTH_SHORT).show();
                                 // 🌟 状态流转：1变4，4变2，6变7
                                 if (currentStatus == 1) o.setStatus(4);
                                 else if (currentStatus == 4) o.setStatus(2);

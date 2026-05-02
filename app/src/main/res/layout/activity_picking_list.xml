@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="今日采摘汇总"
+            android:text="今日采摘汇总报表"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -55,14 +55,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="🧺"
-                android:textSize="80sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="今天暂无需要采摘发货的商品~"
+                android:text="今天暂无需要采摘发货的商品"
                 android:textColor="#999999"
                 android:textSize="16sp" />
         </LinearLayout>

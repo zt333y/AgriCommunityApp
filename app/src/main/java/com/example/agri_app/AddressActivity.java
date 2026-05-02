@@ -104,7 +104,7 @@ public class AddressActivity extends AppCompatActivity {
             String detail = etDetail.getText().toString().trim();
 
             if (detail.isEmpty()) {
-                Toast.makeText(this, "详细门牌号不能为空哦", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "详细门牌号不能为空", Toast.LENGTH_SHORT).show();
                 return;
             }
 

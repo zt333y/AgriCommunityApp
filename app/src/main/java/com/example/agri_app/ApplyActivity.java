@@ -91,7 +91,7 @@ public class ApplyActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
                     if (response.body() != null && response.body().code == 200) {
-                        Toast.makeText(ApplyActivity.this, "🎉 申请已提交，请等待管理员审核", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ApplyActivity.this, "申请已提交，请等待管理员审核", Toast.LENGTH_LONG).show();
                         finish();
                     } else {
                         Toast.makeText(ApplyActivity.this, "提交失败: " + (response.body() != null ? response.body().msg : ""), Toast.LENGTH_SHORT).show();

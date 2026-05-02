@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="30dp"
-                android:text="欢迎加入社区 👋"
+                android:text="欢迎加入社区"
                 android:textColor="#333333"
                 android:textSize="26sp"
                 android:textStyle="bold" />

@@ -57,7 +57,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                     origin = fullAddress.substring(provIdx != -1 ? provIdx + 1 : 0, cityIdx + 1);
                 }
             }
-            tvOrigin.setText("📍 产地: " + origin);
+            tvOrigin.setText("产地: " + origin);
             tvOrigin.setVisibility(View.VISIBLE);
         }
 
@@ -76,13 +76,13 @@ public class ProductDetailActivity extends AppCompatActivity {
         btnAddCart.setOnClickListener(v -> {
             SharedPreferences sp = getSharedPreferences("UserPrefs", MODE_PRIVATE);
             long currentUserId = sp.getLong("userId", -1L);
-            if (currentUserId == -1L) { Toast.makeText(this, "请先登录！", Toast.LENGTH_SHORT).show(); return; }
+            if (currentUserId == -1L) { Toast.makeText(this, "请先登录", Toast.LENGTH_SHORT).show(); return; }
             Cart cart = new Cart(currentUserId, productId, 1);
             RetrofitClient.getApi().addCart(cart).enqueue(new Callback<Result<String>>() {
                 @Override
                 public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
                     if (response.body() != null && response.body().code == 200) {
-                        Toast.makeText(ProductDetailActivity.this, "太棒了！已加入购物车！", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ProductDetailActivity.this, "已加入购物车", Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(ProductDetailActivity.this, "加入失败", Toast.LENGTH_SHORT).show();
                     }
@@ -105,7 +105,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                     reviewsContainer.removeAllViews();
                     if (reviews == null || reviews.isEmpty()) {
                         TextView tvEmpty = new TextView(ProductDetailActivity.this);
-                        tvEmpty.setText("暂无评价，快来抢沙发吧~");
+                        tvEmpty.setText("暂无评价，快来抢沙发吧");
                         tvEmpty.setTextColor(Color.GRAY);
                         tvEmpty.setPadding(0, 20, 0, 20);
                         reviewsContainer.addView(tvEmpty);

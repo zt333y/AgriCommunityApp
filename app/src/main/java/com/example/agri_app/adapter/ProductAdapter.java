@@ -81,7 +81,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     @Override
                     public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
                         if (response.body() != null && response.body().code == 200) {
-                            Toast.makeText(v.getContext(), "🛒 成功加入购物车！", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(v.getContext(), "成功加入购物车", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(v.getContext(), "加入失败", Toast.LENGTH_SHORT).show();
                         }

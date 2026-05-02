@@ -129,11 +129,9 @@ public interface ApiService {
     @POST("/api/product/updateStatus")
     Call<Result<String>> updateProductStatus(@Query("id") Long id, @Query("status") Integer status);
 
-    // 🌟 新增：用户申请售后接口
-    @POST("/order/applyAfterSales") // 请确保这里的路径与你后端 Controller 保持一致
+    @POST("/api/order/applyAfterSales")
     Call<Result<String>> applyAfterSales(@Query("orderId") Long orderId, @Query("reason") String reason);
 
-    // 🌟 新增：团长确认收到用户退货
-    @POST("/order/leaderConfirmReturn")
+    @POST("/api/order/leaderConfirmReturn")
     Call<Result<String>> leaderConfirmReturn(@Query("orderId") Long orderId);
 }

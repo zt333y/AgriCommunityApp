@@ -58,13 +58,13 @@ public class CartFragment extends Fragment {
             String currentAddress = getContext().getSharedPreferences("UserPrefs", 0).getString("address", "");
 
             if (currentAddress == null || currentAddress.trim().isEmpty()) {
-                Toast.makeText(getContext(), "⚠️ 必须填写收货地址才能结算！", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "必须填写收货地址才能结算", Toast.LENGTH_LONG).show();
                 startActivity(new Intent(getContext(), AddressActivity.class));
                 return;
             }
 
             if (currentCartList == null || currentCartList.isEmpty()) {
-                Toast.makeText(getContext(), "购物车是空的，先去挑点东西吧！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "购物车是空的，先去挑点东西吧", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -142,7 +142,7 @@ public class CartFragment extends Fragment {
                 public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
                     dialog.dismiss();
                     if (response.body() != null && response.body().code == 200) {
-                        Toast.makeText(getContext(), "🎉 支付成功！商家将配送至: " + address, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "支付成功！商家将配送至: " + address, Toast.LENGTH_LONG).show();
                         loadCartData(userId); // 支付成功后重新加载（清空）购物车
                     } else {
                         Toast.makeText(getContext(), "结算失败，请稍后重试", Toast.LENGTH_SHORT).show();

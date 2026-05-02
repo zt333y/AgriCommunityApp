@@ -62,6 +62,8 @@ public class OrderActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("待提货"));   // 索引 3 (状态 4)
         tabLayout.addTab(tabLayout.newTab().setText("待评价"));   // 索引 4 (状态 2)
         tabLayout.addTab(tabLayout.newTab().setText("已完成"));   // 索引 5 (状态 3)
+        // 🌟 新增：售后分类 Tab
+        tabLayout.addTab(tabLayout.newTab().setText("售后/退换")); // 索引 6 (状态 >= 5)
 
         // 监听 Tab 的点击事件
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -109,6 +111,13 @@ public class OrderActivity extends AppCompatActivity {
         if (tabPosition == 0) {
             // 全部订单，不用过滤
             displayList.addAll(allOrders);
+        } else if (tabPosition == 6) {
+            // 🌟 售后专区逻辑：把所有状态码大于等于 5 (即处于各种售后阶段) 的订单过滤出来
+            for (OrderVO order : allOrders) {
+                if (order.getStatus() != null && order.getStatus() >= 5) {
+                    displayList.add(order);
+                }
+            }
         } else {
             // 找出每个 Tab 对应的真实业务状态码
             int targetStatus = -1;
