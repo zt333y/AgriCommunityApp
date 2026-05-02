@@ -3,68 +3,95 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp">
+    android:layout_marginHorizontal="15dp"
+    android:layout_marginVertical="8dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="2dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp">
 
-        <TextView
-            android:id="@+id/tv_leader_order_no"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/layout_header"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="订单号: 123"
-            android:textSize="14sp"
-            android:textColor="#333"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/tv_leader_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="状态"
-            android:textSize="14sp"
-            android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/tv_leader_order_no"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="订单号: 123456"
+                android:textColor="#999999"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_leader_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="状态"
+                android:textColor="#FF9800"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/layout_header"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="#F0F0F0" />
 
         <LinearLayout
             android:id="@+id/layout_items_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_leader_order_no"
-            android:layout_marginTop="10dp"
+            android:layout_below="@id/divider"
+            android:background="#F8F9FA"
             android:orientation="vertical"
-            android:padding="8dp"
-            android:background="#F9F9F9">
+            android:padding="12dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="📋 待核销商品明细："
+                android:textColor="#333333"
                 android:textSize="13sp"
-                android:textColor="#666666"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_order_details_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="4dp"
                 android:text="加载中..."
-                android:textSize="14sp"
-                android:textColor="#333333"
-                android:layout_marginTop="4dp" />
+                android:textColor="#666666"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <Button
             android:id="@+id/btn_leader_action"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="38dp"
             android:layout_below="@id/layout_items_container"
             android:layout_alignParentRight="true"
             android:layout_marginTop="15dp"
+            android:backgroundTint="#4CAF50"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
             android:text="操作按钮"
             android:textColor="#FFFFFF"
-            android:visibility="gone"/>
+            android:textSize="14sp"
+            app:cornerRadius="6dp"
+            android:visibility="gone" />
+
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

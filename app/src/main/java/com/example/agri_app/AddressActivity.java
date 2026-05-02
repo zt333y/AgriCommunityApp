@@ -37,7 +37,7 @@ public class AddressActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
-
+        findViewById(R.id.btn_back).setOnClickListener(v -> finish());
         // 1. 初始化级联数据
         initMockData();
 

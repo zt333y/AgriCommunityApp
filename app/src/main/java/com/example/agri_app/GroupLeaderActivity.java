@@ -21,7 +21,7 @@ public class GroupLeaderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_leader);
-
+        findViewById(R.id.btn_back).setOnClickListener(v -> finish());
         recyclerView = findViewById(R.id.rv_leader_orders);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

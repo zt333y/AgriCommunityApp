@@ -39,7 +39,7 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
-
+        findViewById(R.id.btn_back).setOnClickListener(v -> finish());
         ivAvatar = findViewById(R.id.iv_edit_avatar);
         etNickname = findViewById(R.id.et_nickname);
         etPassword = findViewById(R.id.et_password);

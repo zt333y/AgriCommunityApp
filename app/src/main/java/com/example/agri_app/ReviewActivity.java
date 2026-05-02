@@ -36,7 +36,7 @@ public class ReviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
-
+        findViewById(R.id.btn_back).setOnClickListener(v -> finish());
         orderId = getIntent().getLongExtra("ORDER_ID", 0);
 
         tvTitle = findViewById(R.id.tv_review_title);

@@ -21,7 +21,7 @@ public class PickingListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picking_list);
-
+        findViewById(R.id.btn_back).setOnClickListener(v -> finish());
         recyclerView = findViewById(R.id.rv_picking_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

@@ -62,7 +62,7 @@ public class PublishActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
-
+        findViewById(R.id.btn_back).setOnClickListener(v -> finish());
         TextView tvTitle = findViewById(R.id.tv_publish_title);
         EditText etName = findViewById(R.id.et_pub_name);
         EditText etPrice = findViewById(R.id.et_pub_price);

@@ -22,7 +22,7 @@ public class MyProductsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_products);
-
+        findViewById(R.id.btn_back).setOnClickListener(v -> finish());
         rv = findViewById(R.id.rv_my_products);
         rv.setLayoutManager(new LinearLayoutManager(this));
 

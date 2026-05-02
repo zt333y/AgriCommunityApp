@@ -1,148 +1,267 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#4CAF50"
     android:fitsSystemWindows="true"
-    android:background="#F5F7FA">
+    android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:layout_height="50dp"
+        android:background="#4CAF50">
+
+        <LinearLayout
+            android:id="@+id/btn_back"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:text="❮"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_publish_title"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_publish_title"  android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="✨ 发布农产品"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="#333333"
-            android:layout_marginBottom="20dp"/>
+            android:layout_centerInParent="true"
+            android:text="发布农产品"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F5F7FA"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/shape_search_bar"
-            android:padding="15dp"
-            android:layout_marginBottom="20dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <TextView android:layout_width="70dp" android:layout_height="wrap_content" android:text="商品名称" android:textColor="#333" android:textSize="15sp"/>
-                <EditText android:id="@+id/et_pub_name" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@null" android:hint="如: 龙泉驿水蜜桃" android:textSize="15sp"/>
-            </LinearLayout>
-            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <TextView android:layout_width="70dp" android:layout_height="wrap_content" android:text="商品价格" android:textColor="#333" android:textSize="15sp"/>
-                <EditText android:id="@+id/et_pub_price" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:background="@null" android:inputType="numberDecimal" android:hint="输入金额" android:textSize="15sp" android:textColor="#F44336"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="元 / " android:textColor="#333" android:textSize="15sp"/>
-                <Spinner android:id="@+id/spinner_unit" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@null"/>
-            </LinearLayout>
-            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <TextView android:layout_width="70dp" android:layout_height="wrap_content" android:text="商品分类" android:textColor="#333" android:textSize="15sp"/>
-                <Spinner android:id="@+id/spinner_category" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@null"/>
-            </LinearLayout>
-            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <TextView android:layout_width="70dp" android:layout_height="wrap_content" android:text="初始库存" android:textColor="#333" android:textSize="15sp"/>
-                <EditText android:id="@+id/et_pub_stock" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@null" android:inputType="number" android:hint="输入数量" android:textSize="15sp"/>
-            </LinearLayout>
-            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
+            android:padding="20dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="#FFFFFF"
+                android:elevation="2dp"
                 android:orientation="vertical"
-                android:layout_marginTop="10dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="详细描述" android:textColor="#333" android:textSize="15sp" android:layout_marginBottom="8dp"/>
-                <EditText android:id="@+id/et_pub_desc" android:layout_width="match_parent" android:layout_height="80dp" android:background="@null" android:gravity="top" android:hint="描述一下口感、产地、保存方式等..." android:textSize="14sp"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/layout_image_picker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp"
-            android:layout_marginBottom="30dp">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#FFFFFF">
-
-                <ImageView
-                    android:id="@+id/iv_pub_image"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:scaleType="centerCrop"
-                    app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"/>
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp">
 
                 <LinearLayout
-                    android:id="@+id/tv_image_hint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent">
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="75dp"
+                        android:layout_height="wrap_content"
+                        android:text="商品名称"
+                        android:textColor="#333333"
+                        android:textSize="15sp" />
+                    <EditText
+                        android:id="@+id/et_pub_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:hint="如: 龙泉驿水蜜桃"
+                        android:textColor="#333333"
+                        android:textColorHint="#B0B0B0"
+                        android:textSize="15sp" />
+                </LinearLayout>
 
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@android:drawable/ic_menu_camera"
-                        app:tint="#999999"
-                        android:layout_marginBottom="8dp"/>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="75dp"
+                        android:layout_height="wrap_content"
+                        android:text="商品价格"
+                        android:textColor="#333333"
+                        android:textSize="15sp" />
+                    <EditText
+                        android:id="@+id/et_pub_price"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="输入金额"
+                        android:inputType="numberDecimal"
+                        android:textColor="#F44336"
+                        android:textColorHint="#B0B0B0"
+                        android:textSize="15sp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="点击上传商品主图 (1:1 比例)"
-                        android:textSize="14sp"
-                        android:textColor="#999999"/>
+                        android:text="元 / "
+                        android:textColor="#333333"
+                        android:textSize="15sp" />
+                    <Spinner
+                        android:id="@+id/spinner_unit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground" />
                 </LinearLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" />
 
-        <Button
-            android:id="@+id/btn_publish"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:text="立即发布"
-            android:backgroundTint="#4CAF50"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="75dp"
+                        android:layout_height="wrap_content"
+                        android:text="商品分类"
+                        android:textColor="#333333"
+                        android:textSize="15sp" />
+                    <Spinner
+                        android:id="@+id/spinner_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground" />
+                </LinearLayout>
 
-    </LinearLayout>
-</ScrollView>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="75dp"
+                        android:layout_height="wrap_content"
+                        android:text="初始库存"
+                        android:textColor="#333333"
+                        android:textSize="15sp" />
+                    <EditText
+                        android:id="@+id/et_pub_stock"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:hint="输入发货数量"
+                        android:inputType="number"
+                        android:textColor="#333333"
+                        android:textColorHint="#B0B0B0"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="详细描述"
+                        android:textColor="#333333"
+                        android:textSize="15sp" />
+                    <EditText
+                        android:id="@+id/et_pub_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:background="@null"
+                        android:gravity="top"
+                        android:hint="描述一下口感、产地、保存方式等..."
+                        android:textColor="#333333"
+                        android:textColorHint="#B0B0B0"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/layout_image_picker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#FFFFFF">
+
+                    <ImageView
+                        android:id="@+id/iv_pub_image"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintDimensionRatio="1:1"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:id="@+id/tv_image_hint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginBottom="8dp"
+                            android:src="@android:drawable/ic_menu_camera"
+                            app:tint="#999999" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="点击上传商品主图 (建议 1:1 比例)"
+                            android:textColor="#999999"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btn_publish"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="#4CAF50"
+                android:text="立 即 发 布"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="8dp" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -18,7 +18,10 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
+// 激活返回按钮
+        findViewById(R.id.btn_back).setOnClickListener(v -> finish());
+// 激活底部“返回登录”文字按钮
+        findViewById(R.id.tv_back_to_login).setOnClickListener(v -> finish());
         EditText etUser = findViewById(R.id.et_reg_username);
         EditText etPhone = findViewById(R.id.et_reg_phone);
         EditText etPwd = findViewById(R.id.et_reg_password);

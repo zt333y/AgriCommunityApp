@@ -126,6 +126,12 @@ public class CartFragment extends Fragment {
         TextView tvAmount = dialogView.findViewById(R.id.tv_pay_amount);
         tvAmount.setText(String.format("￥%.2f", totalAmount));
 
+        // 🌟🌟🌟 新增：在这里获取 XML 里的 TextView，并把真实地址 set 进去
+        TextView tvPayAddress = dialogView.findViewById(R.id.tv_pay_address);
+        if (tvPayAddress != null) {
+            tvPayAddress.setText(address);
+        }
+
         Button btnPay = dialogView.findViewById(R.id.btn_confirm_pay);
         btnPay.setOnClickListener(v -> {
             btnPay.setText("支付处理中...");

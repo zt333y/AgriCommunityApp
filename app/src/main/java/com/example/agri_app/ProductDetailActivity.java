@@ -28,7 +28,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
-
+        findViewById(R.id.btn_back).setOnClickListener(v -> finish());
         TextView tvName = findViewById(R.id.detail_name);
         TextView tvPrice = findViewById(R.id.detail_price);
         TextView tvDesc = findViewById(R.id.detail_desc);

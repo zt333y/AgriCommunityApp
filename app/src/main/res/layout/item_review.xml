@@ -1,43 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+    android:paddingTop="15dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            app:cardBackgroundColor="#F5F7FA"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="0dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_launcher_round" /> </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/tv_review_user"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
             android:text="张三"
-            android:textStyle="bold"
-            android:textColor="#333333"
-            android:textSize="14sp"/>
+            android:textColor="#666666"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <RatingBar
             android:id="@+id/rb_review_rating"
             style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:isIndicator="true"
             android:numStars="5"
-            android:stepSize="1"/>
+            android:progressTint="#FFC107"
+            android:stepSize="1" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/tv_review_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="菜很新鲜，味道不错！"
-        android:textColor="#666666"
-        android:textSize="14sp"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginLeft="46dp"
+        android:layout_marginTop="10dp"
+        android:lineSpacingExtra="4dp"
+        android:text="菜很新鲜，味道不错！包装也很严实，下次还会再来购买的。"
+        android:textColor="#333333"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        android:background="#F0F0F0" />
+
 </LinearLayout>

@@ -38,7 +38,7 @@ public class ApplyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apply);
         setTitle("资质入驻申请");
-
+        findViewById(R.id.btn_back).setOnClickListener(v -> finish());
         // 1. 初始化级联数据
         initMockData();
 
