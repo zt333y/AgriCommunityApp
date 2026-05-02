@@ -57,6 +57,46 @@
             android:orientation="vertical"
             android:padding="8dp" />
 
+        <LinearLayout
+            android:id="@+id/layout_leader_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="#E8F5E9"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📍 提货点联系方式"
+                android:textColor="#2E7D32"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_leader_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:lineSpacingExtra="2dp"
+                android:text="团长: 加载中\n电话: 加载中"
+                android:textColor="#333333"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_pickup_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="#FFFFFF"
+                android:padding="6dp"
+                android:text="提货地址: 加载中..."
+                android:textColor="#2E7D32"
+                android:textSize="12sp" />
+        </LinearLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -133,6 +173,22 @@
                 android:textSize="13sp"
                 android:visibility="gone"
                 app:cornerRadius="18dp" />
+
+            <Button
+                android:id="@+id/btn_after_sales"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginLeft="10dp"
+                android:backgroundTint="#F44336"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingHorizontal="18dp"
+                android:text="申请售后"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp"
+                android:visibility="gone"
+                app:cornerRadius="18dp" />
+
         </LinearLayout>
 
     </LinearLayout>

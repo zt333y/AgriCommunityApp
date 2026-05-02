@@ -60,16 +60,16 @@ public class MyProductAdapter extends RecyclerView.Adapter<MyProductAdapter.View
 
         // 🌟 状态显示（加上 ▾ 箭头暗示可以点击）
         if (product.getStatus() == null || product.getStatus() == 0) {
-            holder.tvStatusBadge.setText("⏳ 审核中");
+            holder.tvStatusBadge.setText("审核中");
             holder.tvStatusBadge.setBackgroundColor(Color.parseColor("#FF9800"));
         } else if (product.getStatus() == 1) {
-            holder.tvStatusBadge.setText("✅ 已上架 ▾");
+            holder.tvStatusBadge.setText("已上架 ▾");
             holder.tvStatusBadge.setBackgroundColor(Color.parseColor("#4CAF50"));
         } else if (product.getStatus() == 2) {
-            holder.tvStatusBadge.setText("❌ 未通过");
+            holder.tvStatusBadge.setText("未通过");
             holder.tvStatusBadge.setBackgroundColor(Color.parseColor("#F44336"));
         } else if (product.getStatus() == 3) {
-            holder.tvStatusBadge.setText("⏸ 已下架 ▾");
+            holder.tvStatusBadge.setText("已下架 ▾");
             holder.tvStatusBadge.setBackgroundColor(Color.parseColor("#9E9E9E"));
         }
 

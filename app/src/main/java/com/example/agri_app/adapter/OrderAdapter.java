@@ -48,7 +48,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
 
         holder.tvOrderNo.setText("订单号: " + o.getOrderNo());
         holder.tvTime.setText("下单时间: " + o.getCreateTime());
-        holder.tvAmount.setText("实付: ￥" + o.getTotalAmount());
+
+        holder.tvAmount.setText("￥" + o.getTotalAmount());
 
         // 渲染商品明细
         holder.layoutOrderItems.removeAllViews();
@@ -66,7 +67,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                 iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
                 String imgUrl = item.getImageUrl();
-                // 图片 IP 修正
                 if (imgUrl != null && imgUrl.contains("/uploads/")) {
                     imgUrl = "http://192.168.31.60:8080" + imgUrl.substring(imgUrl.indexOf("/uploads/"));
                 }
@@ -98,36 +98,84 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             holder.layoutOrderItems.setVisibility(View.GONE);
         }
 
-        // 默认隐藏操作按钮
+        // 重置所有的隐藏部件
         holder.btnReceive.setVisibility(View.GONE);
         holder.btnReview.setVisibility(View.GONE);
+        holder.btnAfterSales.setVisibility(View.GONE); // 🌟 重置售后按钮隐藏
+        holder.layoutLeaderInfo.setVisibility(View.GONE);
 
-        // 🌟 核心修复：完善了所有的状态扭转树
         if (o.getStatus() != null) {
             if (o.getStatus() == 0) {
-                holder.tvStatus.setText("正在处理 (待发货)");
+                holder.tvStatus.setText("待发货");
                 holder.tvStatus.setTextColor(Color.parseColor("#FF9800"));
 
             } else if (o.getStatus() == 1) {
-                holder.tvStatus.setText("🚚 运输中 (已发货)");
+                holder.tvStatus.setText("已发货");
                 holder.tvStatus.setTextColor(Color.parseColor("#2196F3"));
-                // 也可以允许用户在这个阶段提前确认收货
                 holder.btnReceive.setVisibility(View.VISIBLE);
 
-            } else if (o.getStatus() == 4) { // 🌟 补上了这个至关重要的缺失状态 4
-                holder.tvStatus.setText("📦 已到货 (请联系团长提货)");
-                holder.tvStatus.setTextColor(Color.parseColor("#9C27B0")); // 醒目的紫色
-                // 货到了，允许用户自己点收货（或者让团长扫码核销）
+            } else if (o.getStatus() == 4) {
+                holder.tvStatus.setText("待提货");
+                holder.tvStatus.setTextColor(Color.parseColor("#9C27B0")); // 紫色高亮
                 holder.btnReceive.setVisibility(View.VISIBLE);
+
+                holder.layoutLeaderInfo.setVisibility(View.VISIBLE);
+                String lName = (o.getLeaderName() != null && !o.getLeaderName().isEmpty()) ? o.getLeaderName() : "未分配";
+                String lPhone = (o.getLeaderPhone() != null && !o.getLeaderPhone().isEmpty()) ? o.getLeaderPhone() : "暂无联系方式";
+                String lAddress = (o.getPickupAddress() != null && !o.getPickupAddress().isEmpty()) ? o.getPickupAddress() : "请咨询团长具体位置";
+
+                holder.tvLeaderDetails.setText("团长: " + lName + "\n电话: " + lPhone);
+                holder.tvPickupAddress.setText("提货地址: " + lAddress);
 
             } else if (o.getStatus() == 2) {
-                holder.tvStatus.setText("交易完成 (待评价)");
+                holder.tvStatus.setText("待评价");
                 holder.tvStatus.setTextColor(Color.parseColor("#4CAF50"));
                 holder.btnReview.setVisibility(View.VISIBLE);
 
+                // 🌟🌟 核心：计算提货是否在 24 小时内
+                if (o.getReceiveTime() != null) {
+                    try {
+                        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
+                        java.util.Date receiveDate = sdf.parse(o.getReceiveTime().replace("T", " "));
+                        if (receiveDate != null) {
+                            long diffInMillis = System.currentTimeMillis() - receiveDate.getTime();
+                            long hours24 = 24 * 60 * 60 * 1000L;
+                            if (diffInMillis <= hours24) {
+                                holder.btnAfterSales.setVisibility(View.VISIBLE); // 24小时内显示售后
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
             } else if (o.getStatus() == 3) {
-                holder.tvStatus.setText("已评价 (订单结束)");
+                holder.tvStatus.setText("已完成");
                 holder.tvStatus.setTextColor(Color.parseColor("#9E9E9E"));
+
+                // 🌟🌟 新增：售后相关状态解析
+            } else if (o.getStatus() == 5) {
+                holder.tvStatus.setText("售后审核中");
+                holder.tvStatus.setTextColor(Color.parseColor("#FF9800"));
+            } else if (o.getStatus() == 6) {
+                holder.tvStatus.setText("待退回团长");
+                holder.tvStatus.setTextColor(Color.parseColor("#E91E63"));
+
+                // 审核通过后，依然要显示团长信息，让用户去退货
+                holder.layoutLeaderInfo.setVisibility(View.VISIBLE);
+                String lName = (o.getLeaderName() != null && !o.getLeaderName().isEmpty()) ? o.getLeaderName() : "未分配";
+                String lPhone = (o.getLeaderPhone() != null && !o.getLeaderPhone().isEmpty()) ? o.getLeaderPhone() : "暂无联系方式";
+                String lAddress = (o.getPickupAddress() != null && !o.getPickupAddress().isEmpty()) ? o.getPickupAddress() : "请咨询团长具体位置";
+
+                holder.tvLeaderDetails.setText("团长: " + lName + "\n电话: " + lPhone);
+                holder.tvPickupAddress.setText("退货地址: " + lAddress); // 改为退货地址
+
+            } else if (o.getStatus() == 7) {
+                holder.tvStatus.setText("售后完成");
+                holder.tvStatus.setTextColor(Color.parseColor("#9E9E9E"));
+            } else if (o.getStatus() == 8) {
+                holder.tvStatus.setText("售后被拒");
+                holder.tvStatus.setTextColor(Color.parseColor("#F44336"));
             }
         }
 
@@ -143,6 +191,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                     if (response.body() != null && response.body().code == 200) {
                         Toast.makeText(v.getContext(), "收货成功，快去评价商品吧！", Toast.LENGTH_SHORT).show();
                         currentOrder.setStatus(2);
+                        // 记录本地时间，避免重启前无法申请售后
+                        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
+                        currentOrder.setReceiveTime(sdf.format(new java.util.Date()));
                         notifyItemChanged(currentPos);
                     }
                 }
@@ -163,6 +214,54 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             intent.putExtra("PRODUCT_ID", currentOrder.getProductId());
             v.getContext().startActivity(intent);
         });
+
+        // 🌟 新增：申请售后按钮点击逻辑
+        holder.btnAfterSales.setOnClickListener(v -> {
+            int currentPos = holder.getAdapterPosition();
+            if (currentPos == RecyclerView.NO_POSITION) return;
+            OrderVO currentOrder = orderList.get(currentPos);
+
+            // 弹出对话框输入原因
+            android.widget.EditText inputReason = new android.widget.EditText(v.getContext());
+            inputReason.setHint("请输入退款/退货原因...");
+            inputReason.setPadding(40, 40, 40, 40);
+            inputReason.setBackgroundResource(android.R.color.transparent);
+
+            new android.app.AlertDialog.Builder(v.getContext())
+                    .setTitle("申请售后")
+                    .setMessage("提示：提货超过24小时将无法提交售后申请。")
+                    .setView(inputReason)
+                    .setPositiveButton("提交申请", (dialog, which) -> {
+                        String reason = inputReason.getText().toString().trim();
+                        if (reason.isEmpty()) {
+                            Toast.makeText(v.getContext(), "售后原因不能为空", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        holder.btnAfterSales.setEnabled(false);
+                        RetrofitClient.getApi().applyAfterSales(currentOrder.getId(), reason).enqueue(new Callback<Result<String>>() {
+                            @Override
+                            public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
+                                if (response.body() != null && response.body().code == 200) {
+                                    Toast.makeText(v.getContext(), "申请成功，请等待审核", Toast.LENGTH_SHORT).show();
+                                    currentOrder.setStatus(5);
+                                    currentOrder.setRefundReason(reason);
+                                    notifyItemChanged(currentPos);
+                                } else {
+                                    Toast.makeText(v.getContext(), response.body() != null ? response.body().msg : "申请失败", Toast.LENGTH_SHORT).show();
+                                    holder.btnAfterSales.setEnabled(true);
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<Result<String>> call, Throwable t) {
+                                Toast.makeText(v.getContext(), "网络异常，请检查连接", Toast.LENGTH_SHORT).show();
+                                holder.btnAfterSales.setEnabled(true);
+                            }
+                        });
+                    })
+                    .setNegativeButton("取消", null)
+                    .show();
+        });
     }
 
     @Override
@@ -173,7 +272,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvOrderNo, tvStatus, tvTime, tvAmount;
         LinearLayout layoutOrderItems;
-        Button btnReceive, btnReview;
+        Button btnReceive, btnReview, btnAfterSales; // 🌟 声明售后按钮
+
+        LinearLayout layoutLeaderInfo;
+        TextView tvLeaderDetails;
+        TextView tvPickupAddress;
 
         public ViewHolder(View view) {
             super(view);
@@ -184,6 +287,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             layoutOrderItems = view.findViewById(R.id.layout_order_items);
             btnReceive = view.findViewById(R.id.btn_receive);
             btnReview = view.findViewById(R.id.btn_review);
+            btnAfterSales = view.findViewById(R.id.btn_after_sales); // 🌟 绑定售后按钮
+
+            layoutLeaderInfo = view.findViewById(R.id.layout_leader_info);
+            tvLeaderDetails = view.findViewById(R.id.tv_leader_details);
+            tvPickupAddress = view.findViewById(R.id.tv_pickup_address);
         }
     }
 }

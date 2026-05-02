@@ -89,7 +89,7 @@ public class ReviewActivity extends AppCompatActivity {
         etContent.setText("");
 
         boolean isLast = (currentIndex == orderItems.size() - 1);
-        btnSubmit.setText(isLast ? "提 交 评 价" : "提交并评价下一个");
+        btnSubmit.setText(isLast ? "提 交 评 价" : "评价下一个");
         btnSkip.setText(isLast ? "跳过并完成" : "跳过该商品");
     }
 
