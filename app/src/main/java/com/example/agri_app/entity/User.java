@@ -12,7 +12,7 @@ public class User implements Serializable {
     private Integer role;
     private Long communityId;
     private String address;
-
+    private String avatar;
     // 必须要有一个无参构造函数
     public User() {}
 
@@ -53,4 +53,12 @@ public class User implements Serializable {
 
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
+    public String getAvatar() {
+        return avatar;
+    }
+
+    // 🌟 核心修复：添加 Setter 方法 (这就是报错行正在找的方法)
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 }

@@ -23,6 +23,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,8 +35,10 @@ public class EditProfileActivity extends AppCompatActivity {
     private ImageView ivAvatar;
     private EditText etNickname, etPassword;
     private Long userId;
+    private Button btnSave;
 
     private static final int PICK_IMAGE_REQUEST = 1;
+    private boolean isAvatarChanged = false; // 🌟 标记：用户这次进来有没有更换新头像
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +48,13 @@ public class EditProfileActivity extends AppCompatActivity {
         ivAvatar = findViewById(R.id.iv_edit_avatar);
         etNickname = findViewById(R.id.et_nickname);
         etPassword = findViewById(R.id.et_password);
-        Button btnSave = findViewById(R.id.btn_save_profile);
+        btnSave = findViewById(R.id.btn_save_profile);
 
         SharedPreferences sp = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         userId = sp.getLong("userId", -1L);
         etNickname.setText(sp.getString("nickname", sp.getString("username", "当前昵称")));
 
+        // 加载本地缓存头像展示
         File avatarFile = new File(getFilesDir(), "avatar_" + userId + ".jpg");
         if (avatarFile.exists()) {
             Bitmap bitmap = BitmapFactory.decodeFile(avatarFile.getAbsolutePath());
@@ -63,7 +69,7 @@ public class EditProfileActivity extends AppCompatActivity {
             startActivityForResult(intent, PICK_IMAGE_REQUEST);
         });
 
-        btnSave.setOnClickListener(v -> saveProfile());
+        btnSave.setOnClickListener(v -> handleSave());
     }
 
     @Override
@@ -86,10 +92,10 @@ public class EditProfileActivity extends AppCompatActivity {
                 outputStream.close();
                 inputStream.close();
 
-                // 🌟 核心修复：复制完成后，立即用 BitmapFactory 解码并设置，绝不使用 setImageURI
                 Bitmap bitmap = BitmapFactory.decodeFile(avatarFile.getAbsolutePath());
                 if (bitmap != null) {
                     ivAvatar.setImageBitmap(bitmap);
+                    isAvatarChanged = true; // 🌟 标记：用户刚才换了头像
                 }
 
             } catch (Exception e) {
@@ -99,7 +105,8 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void saveProfile() {
+    // 处理点击保存的逻辑
+    private void handleSave() {
         String newNickname = etNickname.getText().toString().trim();
         String newPassword = etPassword.getText().toString().trim();
 
@@ -108,11 +115,50 @@ public class EditProfileActivity extends AppCompatActivity {
             return;
         }
 
+        btnSave.setEnabled(false);
+        btnSave.setText("正在保存...");
+
+        // 🌟 核心逻辑：如果用户换了头像，先上传头像拿到真实URL，再保存资料
+        if (isAvatarChanged) {
+            File avatarFile = new File(getFilesDir(), "avatar_" + userId + ".jpg");
+            RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), avatarFile);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("file", avatarFile.getName(), requestFile);
+
+            RetrofitClient.getApi().uploadImage(body).enqueue(new Callback<Result<String>>() {
+                @Override
+                public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
+                    if (response.body() != null && response.body().code == 200) {
+                        String uploadedAvatarUrl = response.body().data;
+                        // 头像上传成功，提交所有资料到后端
+                        submitProfileToServer(newNickname, newPassword, uploadedAvatarUrl);
+                    } else {
+                        Toast.makeText(EditProfileActivity.this, "头像上传失败", Toast.LENGTH_SHORT).show();
+                        resetButton();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Result<String>> call, Throwable t) {
+                    Toast.makeText(EditProfileActivity.this, "网络异常，上传失败", Toast.LENGTH_SHORT).show();
+                    resetButton();
+                }
+            });
+        } else {
+            // 用户没换头像，直接提交资料
+            submitProfileToServer(newNickname, newPassword, null);
+        }
+    }
+
+    // 真正向后端提交 User 对象的方法
+    private void submitProfileToServer(String newNickname, String newPassword, String avatarUrl) {
         User user = new User();
         user.setId(userId);
         user.setUsername(newNickname);
         if (!newPassword.isEmpty()) {
             user.setPassword(newPassword);
+        }
+        if (avatarUrl != null) {
+            user.setAvatar(avatarUrl); // 🌟 将拿到的服务器图片地址赋进去
         }
 
         RetrofitClient.getApi().updateProfile(user).enqueue(new Callback<Result<String>>() {
@@ -123,19 +169,27 @@ public class EditProfileActivity extends AppCompatActivity {
                     editor.putString("nickname", newNickname);
                     editor.putString("username", newNickname);
                     if (!newPassword.isEmpty()) editor.putString("password", newPassword);
+                    if (avatarUrl != null) editor.putString("avatar", avatarUrl); // 可选：把头像路径也缓存在本地
                     editor.apply();
 
                     Toast.makeText(EditProfileActivity.this, "资料修改成功！", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
                     Toast.makeText(EditProfileActivity.this, "修改失败", Toast.LENGTH_SHORT).show();
+                    resetButton();
                 }
             }
 
             @Override
             public void onFailure(Call<Result<String>> call, Throwable t) {
                 Toast.makeText(EditProfileActivity.this, "网络异常", Toast.LENGTH_SHORT).show();
+                resetButton();
             }
         });
+    }
+
+    private void resetButton() {
+        btnSave.setEnabled(true);
+        btnSave.setText("保存资料");
     }
 }
